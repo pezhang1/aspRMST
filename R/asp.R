@@ -20,7 +20,7 @@
 #' @param Time - Observed Times
 #' @param Status - Censoring Status
 #' @param Z - non-treatment groupcovariates
-#' @param TRT - treatment group indicator
+#' @param TRT - treatment group indicator (0 = Control, 1 = Treatment)
 #'
 #' @returns
 #'  \itemize{
