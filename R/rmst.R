@@ -24,11 +24,11 @@
 #'
 #' @seealso survival
 #'
-#' @param t0 - time point of analysis
-#' @param Time - Observed Times
-#' @param Status - Censoring Status (0 = Control, 1 = Treatment)
-#' @param Z - non-treatment group covariates
-#' @param TRT - treatment group indicator (0 = Control, 1 = Treatment)
+#' @param t0 - Time point of analysis
+#' @param Time - Observed times
+#' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
+#' @param Z - Non-treatment group covariates
+#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #'
 #' @return
 #' @export

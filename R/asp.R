@@ -17,10 +17,10 @@
 #'
 #'
 #' @param t0 - time point of analysis
-#' @param Time - Observed Times
-#' @param Status - Censoring Status
-#' @param Z - non-treatment groupcovariates
-#' @param TRT - treatment group indicator (0 = Control, 1 = Treatment)
+#' @param Time - Observed Times (0 = Observed, 1 = Censored)
+#' @param Status - Censoring Status (0 = Censored, 1 = Observed)
+#' @param Z - Non-treatment groupcovariates
+#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #'
 #' @returns
 #'  \itemize{
