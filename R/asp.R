@@ -1,4 +1,20 @@
-#' Title
+#' asp
+#'
+#' @description Calculates adjusted survival probability difference between two treatment groups
+#' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
+#' Variance and standard error estimates for the difference are also calculated.
+#' Adjusted survival probability estimates and standard error / variance estimates
+#' are also provided for each group.
+#'
+#' @author Peter Zhang, Brent Logan, Michael Martens
+#'
+#' @details
+#'
+#'
+#' @references
+#'
+#' @seealso survival
+#'
 #'
 #' @param t0 - time point of analysis
 #' @param Time - Observed Times
@@ -6,12 +22,19 @@
 #' @param Z - non-treatment groupcovariates
 #' @param TRT - treatment group indicator
 #'
-#' @return
+#' @returns
+#'  \itemize{
+#'   \item SPD - restricted mean survival time differene estimate
+#'   \item SE2 - standard error estimate of restricted mean survival time difference estimate
+#'   \item S0 - adjusted survival probability of treatment group 0
+#'   \item S1 - adjusted survival probability of treatment group 1
+#'   \item se10 - standard error of adjusted survival probability of treatment group 0
+#'   \item se11 - standard error of adjusted survival probability of treatment group 1
+#' }
 #' @export
 #'
 #' @examples
-#'
-#' library("survival)
+#' library(survival)
 #' t0 = 1
 #' TRT = c(rep(0,5),rep(1,5))
 #' Z = cbind(rnorm(10))
@@ -115,14 +138,19 @@ D0 = c01*Q0 - Lambda00*c02
 D1 = c11*Q1 - Lambda01*c12
 DD = D1-D0
 
+v10 = c01^2*gamma0/n0 + var(CS0)/n0
+se10 = sqrt(v10)
 
+v11 = c11^2*gamma1/n1 + var(CS0)/n1
+se11 = sqrt(v11)
 # Calculate standard error of SE difference
+
+
 V1 = c01^2*gamma0/n0 + c11^2*gamma1/n1 + t(DD)%*%SigmaInv%*%DD
 V2 = V1 + SPV/n
 SE1 = sqrt(V1)
 SE2 = sqrt(V2)
 
-return(list(Lambda00=Lambda00,Lambda01=Lambda01,S0=S0,S1=S1,SPD=SPD,SPV=SPV,V1=V1,V2=V2,SE1=SE1,SE2=SE2,CS0=CS0,CS1=CS1,
-            gamma0=gamma0,gamma1=gamma1,Q0=Q0,Q1=Q1,c01=c01,c11=c11,c02=c02,c12=c12,D0=D0,D1=D1,DD=DD,SigmaInv=SigmaInv,
-            X0=X0,X1=X1,n=n,n0=n0,n1=n1))
+return(list(S0=S0,S1=S1,SPD=SPD,SPV=SPV,V1=V1,V2=V2,SE1=SE1,SE2=SE2,
+            v10 = v10, v11=v11, se10=se10, se11=se11))
 }

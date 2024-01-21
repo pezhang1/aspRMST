@@ -1,16 +1,40 @@
-#' Title
+#' rmst
+#'
+#' @description Calculates restricted mean survival time difference between two treatment groups
+#' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
+#' Variance and standard error estimates for the difference are also calculated.
+#' Restricted mean survival time estimates and standard error / variance estimates
+#' are also provided for each group.
+#'
+#' @author Peter Zhang, Brent Logan, Michael Martens
+#'
+#' @details
+#'
+#' @returns
+#'  \itemize{
+#'   \item Delta - restricted mean survival time differene estimate
+#'   \item DSE2 - standard error estimate of restricted mean survival time difference estimate
+#'   \item mu0 - restricted mean survival time of treatment group 0
+#'   \item mu1 - restricted mean survival time of treatment group 1
+#'   \item se10 - standard error of restricted mean survival time of treatment group 0
+#'   \item se11 - standard error of restricted mean survival time of treatment group 1
+#' }
+#'
+#' @references
+#'
+#' @seealso survival
 #'
 #' @param t0 - time point of analysis
 #' @param Time - Observed Times
 #' @param Status - Censoring Status
 #' @param Z - non-treatment groupcovariates
-#' @param TRT - treatment group indicator
+#' @param TRT - treatment group indicator (0 = Control, 1 = Treatment)
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' library("survival)
+#' library(survival)
 #' t0 = 1
 #' TRT = c(rep(0,5),rep(1,5))
 #' Z = cbind(rnorm(10))
@@ -125,7 +149,8 @@ rmst = function(t0,Time,Status,Z,TRT){
   DV2 = DV1 + DeltaV/n
   DSE2 = sqrt(DV2)
 
-  list(mu0=mu0,mu1=mu1,Delta=Delta,DeltaV=DeltaV,DV1=DV1,DV2=DV2,DSE1=DSE1,DSE2=DSE2 )
+  list(mu0=mu0,mu1=mu1,Delta=Delta,DSE2=DSE2,
+       se10=se10, se11=se11)
 }
 
 

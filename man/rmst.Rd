@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmst.R
 \name{rmst}
 \alias{rmst}
-\title{Title}
+\title{rmst}
 \usage{
 rmst(t0, Time, Status, Z, TRT)
 }
@@ -18,8 +18,47 @@ rmst(t0, Time, Status, Z, TRT)
 \item{TRT}{- treatment group indicator}
 }
 \value{
+\itemize{
+  \item Delta - restricted mean survival time differene estimate
+  \item DSE2 - standard error estimate of restricted mean survival time difference estimate
+  \item mu0 - restricted mean survival time of treatment group 0
+  \item mu1 - restricted mean survival time of treatment group 1
+  \item se10 - standard error of restricted mean survival time of treatment group 0
+  \item se11 - standard error of restricted mean survival time of treatment group 1
+}
+
 
 }
 \description{
-Title
+Calculates restricted mean survival time difference between two treatment groups
+at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
+Variance and standard error estimates for the difference are also calculated.
+Restricted mean survival time estimates and standard error / variance estimates
+are also provided for each group.
+}
+\details{
+
+}
+\examples{
+library(survival)
+t0 = 1
+TRT = c(rep(0,5),rep(1,5))
+Z = cbind(rnorm(10))
+FT = c(0.30,  0.58,  0.41,  0.0333,  0.58,  0.10,  0.83,  2.45,  8.7, 17.1)
+CT = c(0.20, 0.8, 0.73, 0.24, 0.5, 0.25, 1.3, 3.6, 10, 20.5)
+X = pmin(FT,CT)
+Status = as.numeric(FT <= CT)     & (X <= t0)
+Time = pmin(X,t0)
+rmst(t0,Time,Status,Z,TRT)$Delta
+rmst(t0,Time,Status,Z,TRT)$DSE2
+
+}
+\references{
+
+}
+\seealso{
+survival
+}
+\author{
+Peter Zhang, Brent Logan, Michael Martens
 }
