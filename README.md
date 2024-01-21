@@ -3,7 +3,32 @@
 
 # Introduction
 
-# aspRMST
+Clinical trials often involve the analysis of time-to-event data to
+determine the efficacy of a treatment. In the presence of baseline
+covariates, the hazard ratio (HR) under the Cox proportional hazards
+model is often used to quantify treatment effects. However, when the HR
+is nonproportional over time, a Cox PH model may lead to incorrect
+conclusions; \#because the resulting estimates of the HR depend on the
+follow-up duration and censoring distribution; the interpretation of the
+HR estimate becomes less useful clinically in this context as well As an
+alternative summary measure to the HR for describing the magnitude of
+the treatment effect, the difference in survival probabilities ({}) at a
+fixed follow-up time has been proposed to quantify the difference in
+survival outcomes between treatment arms. The SP measure remains
+clinically interpretable even when survival curves have NPH,
+facilitating communications between physicians and patients..
+
+An alternative yet useful summary measure is the restricted mean
+survival time (RMST) at time *τ*, also called *τ*-year mean survival
+time, which is the mean survival time of all subjects in the study
+population followed up to the specific time point *τ*. The restricted
+time is often considered, as information on patient outcomes may not be
+available beyond a certain time point due to limited study follow-up.
+The RMST summarizes the temporal event time distribution during the time
+interval \[0, *τ*\] and corresponds to the area under the survival curve
+up to the survival time *τ*. The RMST is an alternative summary measure
+to the survival function and provides information beyond the survival
+probability only at a single time point \# aspRMST
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -24,6 +49,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(aspRMST)
+#> Loading required package: survival
 ## basic example code
 ```
 
