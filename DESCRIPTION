@@ -1,13 +1,14 @@
 Package: aspRMST
 Type: Package
-Title: Calculated adjusted survival probability (ASP) estimates and restricted mean survival time (RMST) estimates
+Title: Calculates adjusted survival probability (ASP) estimates and restricted mean survival time (RMST) estimates
 Version: 0.1.0
+Date: January 20, 2024
 Author: Peter Zhang <pezhang@mcw.edu>, Brent Logan <blogan@mcw.edu>, Michael Martens <mmartens@mcw.edu>
 Maintainer: Peter Zhang <pezhang@mcw.edu>
-Description: Provides ...
+Depends: survival
+Description: Calculates the difference in adjusted survival probability (ASP) and the difference in restricted mean survival time (RMST) via treatment-stratified Cox proportional hazards models. Standard error estimates of these differences are also provided. ASP, RMST, and their standard error estimates are also provided for both the treatment group and control group.
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.2
+Repository: CRAN
 URL: https://github.com/pezhang1/aspRMST
 BugReports: https://github.com/pezhang1/aspRMST/issues
