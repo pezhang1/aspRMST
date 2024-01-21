@@ -26,7 +26,7 @@
 #'
 #' @param t0 - time point of analysis
 #' @param Time - Observed Times
-#' @param Status - Censoring Status
+#' @param Status - Censoring Status (0)
 #' @param Z - non-treatment groupcovariates
 #' @param TRT - treatment group indicator (0 = Control, 1 = Treatment)
 #'
