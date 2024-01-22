@@ -24,7 +24,7 @@
 #'
 #' @seealso survival
 #'
-#' @param t0 - Time point of analysis
+#' @param t0 - pre-specified time point, rmst is calculated over(0, t0)
 #' @param Time - Observed times
 #' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
 #' @param Z - Non-treatment group covariates
@@ -43,8 +43,9 @@
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' rmst(t0,Time,Status,Z,TRT)$Delta
-#' rmst(t0,Time,Status,Z,TRT)$DSE2
+#' output = rmst(t0,Time,Status,Z,TRT)
+#' output$Delta
+#' output$DSE2
 #'
 rmst = function(t0,Time,Status,Z,TRT){
   # Calculate RMST difference and its standard error

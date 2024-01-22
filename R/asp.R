@@ -43,8 +43,9 @@
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' asp(t0,Time,Status,Z,TRT)$SPD
-#' asp(t0,Time,Status,Z,TRT)$SE2
+#' output = asp(t0,Time,Status,Z,TRT)
+#' output$SPD
+#' output$SE2
 asp = function(t0,Time,Status,Z,TRT) {
 n= length(TRT)
 n1 = sum(TRT)
