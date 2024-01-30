@@ -9,13 +9,13 @@ asp(t0, Time, Status, Z, TRT)
 \arguments{
 \item{t0}{- time point of analysis}
 
-\item{Time}{- Observed Times}
+\item{Time}{- Observed Times (0 = Observed, 1 = Censored)}
 
-\item{Status}{- Censoring Status}
+\item{Status}{- Censoring Status (0 = Censored, 1 = Observed)}
 
-\item{Z}{- non-treatment groupcovariates}
+\item{Z}{- Non-treatment groupcovariates}
 
-\item{TRT}{- treatment group indicator}
+\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
 }
 \value{
 \itemize{
@@ -47,8 +47,9 @@ CT = c(0.20, 0.8, 0.73, 0.24, 0.5, 0.25, 1.3, 3.6, 10, 20.5)
 X = pmin(FT,CT)
 Status = as.numeric(FT <= CT)     & (X <= t0)
 Time = pmin(X,t0)
-asp(t0,Time,Status,Z,TRT)$SPD
-asp(t0,Time,Status,Z,TRT)$SE2
+output = asp(t0,Time,Status,Z,TRT)
+output$SPD
+output$SE2
 }
 \references{
 

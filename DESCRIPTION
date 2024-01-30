@@ -12,3 +12,7 @@ RoxygenNote: 7.1.2
 Repository: CRAN
 URL: https://github.com/pezhang1/aspRMST
 BugReports: https://github.com/pezhang1/aspRMST/issues
+Collate: 
+    'asp.R'
+    'gsASP.R'
+    'rmst.R'
