@@ -1,7 +1,5 @@
-#' rmst
-#' @include asp.R
-NULL
-
+#' @title Restricted Mean Survival Time
+#'
 #'
 #' @description Calculates restricted mean survival time difference between two treatment groups
 #' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
@@ -37,6 +35,8 @@ NULL
 #'
 #' @return
 #' @export
+#'
+#'
 #'
 #' @examples
 #' library(survival)

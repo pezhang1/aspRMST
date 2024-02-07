@@ -15,4 +15,5 @@ BugReports: https://github.com/pezhang1/aspRMST/issues
 Collate: 
     'asp.R'
     'gsASP.R'
+    'gsRMST.R'
     'rmst.R'

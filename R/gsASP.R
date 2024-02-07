@@ -1,22 +1,21 @@
-
-
-
-#' Title
+#' gsASP
 #'
-#' @param t0
-#' @param Time
-#' @param Status
-#' @param Z
-#' @param TRT
-#' @param E
-#' @param alpha
-#' @param u
+#' @param t0 -  pre-specified time point
+#' @param Time - Observed times
+#' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
+#' @param Z - Non-treatment group covariates
+#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
+#' @param E - Enrollment times
+#' @param alpha - Targeted type I error rate
+#' @param u - Calendar times of analysis
 #'
 #' @return
 #' @export
 #'
 #'
 gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
+
+
   data = as.data.frame(cbind(TRT, E, Time, Status, Z))
   spd = spdse = NULL
   for (i in 1:length(u)) {
