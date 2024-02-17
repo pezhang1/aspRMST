@@ -23,9 +23,6 @@ gsASP(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
 
 \item{u}{- Calendar times of analysis}
 }
-\value{
-
-}
 \description{
 gsASP
 }

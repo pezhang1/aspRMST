@@ -34,9 +34,6 @@ Variance and standard error estimates for the difference are also calculated.
 Adjusted survival probability estimates and standard error / variance estimates
 are also provided for each group.
 }
-\details{
-
-}
 \examples{
 library(survival)
 t0 = 1
@@ -50,9 +47,6 @@ Time = pmin(X,t0)
 output = asp(t0,Time,Status,Z,TRT)
 output$SPD
 output$SE2
-}
-\references{
-
 }
 \seealso{
 survival

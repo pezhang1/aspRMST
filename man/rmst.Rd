@@ -26,8 +26,6 @@ rmst(t0, Time, Status, Z, TRT)
   \item se10 - standard error of restricted mean survival time of treatment group 0
   \item se11 - standard error of restricted mean survival time of treatment group 1
 }
-
-
 }
 \description{
 Calculates restricted mean survival time difference between two treatment groups
@@ -35,9 +33,6 @@ at a pre-specified time point via a treatment-stratified Cox proportional hazard
 Variance and standard error estimates for the difference are also calculated.
 Restricted mean survival time estimates and standard error / variance estimates
 are also provided for each group.
-}
-\details{
-
 }
 \examples{
 library(survival)
@@ -63,9 +58,6 @@ Status = as.numeric(FT <= CT)     & (X <= t0)
 Time = pmin(X,t0)
 rmst(t0,Time,Status,Z,TRT)$Delta
 rmst(t0,Time,Status,Z,TRT)$DSE2
-
-}
-\references{
 
 }
 \seealso{

@@ -7,10 +7,21 @@
 gsRMST(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
 }
 \arguments{
-\item{u}{}
-}
-\value{
+\item{t0}{-  pre-specified time point}
 
+\item{Time}{- Observed times}
+
+\item{Status}{- Censoring indicator (0 = Censored, 1 = Observed)}
+
+\item{Z}{- Non-treatment group covariates}
+
+\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
+
+\item{E}{E - Enrollment times}
+
+\item{alpha}{- Targeted type I error rate}
+
+\item{u}{- Calendar times of analysis}
 }
 \description{
 Title
