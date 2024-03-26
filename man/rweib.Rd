@@ -7,7 +7,11 @@
 rweib(n, shape, rate)
 }
 \arguments{
-\item{rate}{}
+\item{n}{- sample size}
+
+\item{shape}{- shape parameter for Weibull distribution}
+
+\item{rate}{- rate parameter for Weibull distribution}
 }
 \description{
 Title
