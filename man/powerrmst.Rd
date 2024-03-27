@@ -32,3 +32,8 @@ powerrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha)
 \description{
 Title
 }
+\examples{
+\dontrun{}
+
+
+}

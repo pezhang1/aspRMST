@@ -44,3 +44,6 @@ Imaxrmstbinary(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}

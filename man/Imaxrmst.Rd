@@ -30,3 +30,8 @@ Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 \description{
 Title
 }
+\examples{
+\dontrun{
+}
+
+}

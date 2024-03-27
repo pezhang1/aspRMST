@@ -16,6 +16,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' }
+#'
 Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
   minE = 0
   beta1 = root(alpha0, alpha1, gamma0, beta2, t0, effect)
@@ -87,6 +90,9 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' @export
 #'
 #' @examples
+#' \dontrun{}
+#'
+#'
 powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha) {
   Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
   V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN)
@@ -125,6 +131,7 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
   Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
   V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN)
@@ -160,6 +167,7 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 ESrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(1-beta)

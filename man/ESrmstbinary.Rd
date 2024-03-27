@@ -50,3 +50,6 @@ ESrmstbinary(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}

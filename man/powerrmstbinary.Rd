@@ -47,3 +47,6 @@ powerrmstbinary(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}

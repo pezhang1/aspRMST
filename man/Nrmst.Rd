@@ -47,3 +47,6 @@ Nrmst(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}

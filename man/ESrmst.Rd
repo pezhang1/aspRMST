@@ -47,3 +47,6 @@ ESrmst(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}

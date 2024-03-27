@@ -18,6 +18,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p ) {
   minE = 0
   beta1 = rootbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
@@ -87,6 +88,7 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p)
   V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN,p)
@@ -120,6 +122,7 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN,p)
   V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN,p)
@@ -151,6 +154,7 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 #' @export
 #'
 #' @examples
+#' \dontrun{}
 ESrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter=10,p){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(1-beta)

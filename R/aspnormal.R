@@ -16,6 +16,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect=0, NN=10000)
+#' }
 Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
   asp.diff.est = NULL
   asp.diff.se = NULL

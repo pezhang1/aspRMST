@@ -50,3 +50,6 @@ Nrmstbinary(
 \description{
 Title
 }
+\examples{
+\dontrun{}
+}
