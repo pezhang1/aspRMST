@@ -2,16 +2,7 @@
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param n - sample size per group
-#' @param effect - targeted effect size
-#' @param NN - number of iterations
+#' @inheritParams Imaxrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @return
@@ -71,17 +62,7 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param n - sample size per group
-#' @param effect - targeted effect size
-#' @param NN - number of iterations
-#' @param alpha - targeted type I error rate
+#' @inheritParams powerrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @return
@@ -104,18 +85,7 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param m - sample size used to calculate the maximum information, Imax
-#' @param effect - targeted effect size
-#' @param NN - number of iterations
-#' @param alpha - targeted type I error rate
-#' @param beta - targeted type II error rate
+#' @inheritParams Nrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @return
@@ -136,18 +106,7 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param n - sample size
-#' @param NN - number of iterations
-#' @param alpha - targeted type I error rate
-#' @param beta - targeted type II error rate
-#' @param max.iter - maximum number of iterations to calculate the effect size
+#' @inheritParams ESrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @return

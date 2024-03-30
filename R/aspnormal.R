@@ -1,9 +1,22 @@
 
-#' Title
+#' @title Adjusted survival probabilities for normal outcomes
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
+#' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
+#'
+#' @details In the functions that calculate sample size, power, or effect size, Trial data are simulated using the following assumptions.
+#' Assume the event time for a subject follows a Weibull distribution with survival function
+#' \deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
+#' where the shape and rate parameters
+#' \eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
+#' and \eqn{\mathbf{Z}} (vector of baseline covariates):
+#'  \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
+#' \deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+#' \eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
+#' simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
+#'
+#' @param alpha0 - parameter to specify in Weibull model. See Details for more information.
+#' @param alpha1 - parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated
+#' @param gamma0 - parameter to specify in Weibull model. See Details for more information.
 #' @param beta2 -vector of coefficients for non-treatment group binary variables
 #' @param crate - censoring rate, assumes an exponential distribution
 #' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
@@ -71,16 +84,12 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param n - sample size per group
-#' @param effect - targeted effect size
-#' @param NN - number of iterations
+#'
+#'
+#'
+#' @inherit Imaxasp details
+#'
+#' @inheritParams Imaxasp
 #' @param alpha - targeted type I error rate
 #'
 #' @return
@@ -107,18 +116,9 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 #' Title
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
+#' @inheritParams powerasp
 #' @param m - sample size used to calculate the maximum information, Imax
-#' @param effect - targeted effect size
-#' @param NN - number of iterations
-#' @param alpha - targeted type I error rate
-#' @param beta- targeted type II error rate
+#' @param beta - targeted type II error rate
 #'
 #' @return
 #' @export
@@ -143,17 +143,16 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 
 
 
-#' Title
+#' @title effect size
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 -vector of coefficients for non-treatment group binary variables
-#' @param crate - censoring rate, assumes an exponential distribution
-#' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
-#' @param maxE - maximum enrollment time. Assumes uniform enrollment between [0,E]
-#' @param n - sample size
-#' @param NN - number of iterations
+#'
+#'
+#' @description Calculate effect size given power and sample size
+#'
+#' @details \linkSections{Imaxasp,details}
+#'
+#' @inheritParams Imaxasp
+#'
 #' @param alpha - targeted type I error rate
 #' @param beta - targeted type II error rate
 #' @param max.iter - maximum number of iterations to calculate the effect size

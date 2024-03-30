@@ -21,11 +21,11 @@ ESrmstbinary(
 )
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model}
+\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model}
+\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
 
 \item{beta2}{-vector of coefficients for non-treatment group binary variables}
 
@@ -35,15 +35,11 @@ ESrmstbinary(
 
 \item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
 
-\item{n}{- sample size}
+\item{n}{- sample size per group}
 
 \item{NN}{- number of iterations}
 
 \item{alpha}{- targeted type I error rate}
-
-\item{beta}{- targeted type II error rate}
-
-\item{max.iter}{- maximum number of iterations to calculate the effect size}
 
 \item{p}{- vector of probabilities for non-treatment group binary variables}
 }

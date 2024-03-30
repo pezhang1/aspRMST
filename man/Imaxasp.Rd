@@ -2,16 +2,16 @@
 % Please edit documentation in R/aspnormal.R
 \name{Imaxasp}
 \alias{Imaxasp}
-\title{Title}
+\title{Adjusted survival probabilities for normal outcomes}
 \usage{
 Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model}
+\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model}
+\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
 
 \item{beta2}{-vector of coefficients for non-treatment group binary variables}
 
@@ -28,5 +28,22 @@ Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 \item{NN}{- number of iterations}
 }
 \description{
-Title
+Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
+}
+\details{
+In the functions that calculate sample size, power, or effect size, Trial data are simulated using the following assumptions.
+Assume the event time for a subject follows a Weibull distribution with survival function
+\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
+where the shape and rate parameters
+\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
+and \eqn{\mathbf{Z}} (vector of baseline covariates):
+ \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
+\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
+simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
+}
+\examples{
+\dontrun{
+Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect=0, NN=10000)
+}
 }

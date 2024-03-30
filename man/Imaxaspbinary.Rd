@@ -2,21 +2,16 @@
 % Please edit documentation in R/aspbinary.R
 \name{Imaxaspbinary}
 \alias{Imaxaspbinary}
-\title{Title
-Assume the event time for each subject follows a Weibull distribution with survival function
-$S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha})$,
-where the shape and rate parameters $\alpha$ and $\gamma$ depend on $Z_W$ and $\mathbf{Z}$ through the forms
-$\alpha = \alpha_0 + \alpha_1Z_W$ and
-$\gamma = \gamma_0 \exp(\beta_WZ_W + \bfbeta^T \bfZ)$.}
+\title{Imaxaspbinary}
 \usage{
 Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, p)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model}
+\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model}
+\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
 
 \item{beta2}{-vector of coefficients for non-treatment group binary variables}
 
@@ -35,16 +30,10 @@ Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, p)
 \item{p}{- vector of probabilities for non-treatment group binary variables}
 }
 \description{
-Title
-Assume the event time for each subject follows a Weibull distribution with survival function
-$S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha})$,
-where the shape and rate parameters $\alpha$ and $\gamma$ depend on $Z_W$ and $\mathbf{Z}$ through the forms
-$\alpha = \alpha_0 + \alpha_1Z_W$ and
-$\gamma = \gamma_0 \exp(\beta_WZ_W + \bfbeta^T \bfZ)$.
+Imaxaspbinary
 }
 \examples{
 \dontrun{
 Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
 }
-
 }

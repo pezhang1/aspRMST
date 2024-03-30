@@ -7,11 +7,11 @@
 powerrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model}
+\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model}
+\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
 
 \item{beta2}{-vector of coefficients for non-treatment group binary variables}
 
