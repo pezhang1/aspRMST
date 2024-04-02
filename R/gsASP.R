@@ -1,5 +1,7 @@
 #' gsASP
 #'
+#' @inherit Imaxasp references
+#'
 #' @param t0 -  pre-specified time point
 #' @param Time - Observed times
 #' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
@@ -9,9 +11,43 @@
 #' @param alpha - Targeted type I error rate
 #' @param u - Calendar times of analysis
 #'
+#' @importFrom gsDesign gsDesign
+#'
+#' @seealso gsDesign
+#'
 #' @return
 #' @export
 #'
+#' @example
+#' \dontrun{
+#' library(survival)
+#'
+#' alpha0 = 1.5
+#' alpha1 = -1
+#' beta1 = -0.399782432
+#' n=200
+#' crate =0
+#' beta2=0
+#' t0=1
+#' gamma0 = -log(0.4)
+#' maxE = 2
+#' u = c(1.6, 2.1, 3)
+#' E = runif(2*n, min=0, max=maxE)          # enrollment times
+#' Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
+#' Z2 = as.matrix(rnorm(2*n))                             # covariates
+#' alpha = alpha0+alpha1*Z1
+#' gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+#' FT = rweib(2*n, alpha, gamma1)
+#' CT = NULL
+#' if (crate == 0)
+#' {CT = Inf } else
+#' {CT = rexp(2*n, rate=crate)}
+#' Data = cbind(E,FT,CT,Z1,Z2)
+#' delta = as.numeric(FT < CT)
+#' test <- gsASP(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
+#' test$Crit
+#' test$Z
+#' }
 #'
 gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
 

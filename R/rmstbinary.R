@@ -5,6 +5,8 @@
 #' @inheritParams Imaxrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
+#' @inherit Imaxrmst references
+#'
 #' @return
 #' @export
 #'
@@ -65,6 +67,8 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #' @inheritParams powerrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
+#' @inherit Imaxrmst references
+#'
 #' @return
 #' @export
 #'
@@ -88,6 +92,8 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 #' @inheritParams Nrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
+#' @inherit Imaxrmst references
+#'
 #' @return
 #' @export
 #'
@@ -108,6 +114,8 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 #'
 #' @inheritParams ESrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
+#'
+#' @inherit Imaxrmst references
 #'
 #' @return
 #' @export

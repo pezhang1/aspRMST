@@ -6,8 +6,23 @@
 #' @return
 #' @export
 #'
+#'
+#'
+#' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+#' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS macro for
+#' estimation of direct adjusted survival curves based on a stratified Cox regression
+#' model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+#' @references Zhang, X. (2013). omparison of restricted mean survival times between treatments
+#' based on a stratified cox model. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+#' @references Zucker, D.M. (1998) Restricted mean life with covariates: modification and extension
+#' of a useful survival analysis method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
+#'
+#'
+#'
 #' @examples
 #' \dontrun{
+#' set.seed(1234)
+#' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect=0.08788154, NN = 100)
 #' }
 #'
 Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
@@ -67,12 +82,19 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #'
 #'
 #' @inheritParams powerasp
+#'
+#'
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
+#'
+#'  @inherit Imaxrmst references
 #' @return
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=199, effect=0.08788154, NN=200, alpha=0.05)
+#' }
 #'
 #'
 powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha) {
@@ -98,11 +120,17 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 #'
 #' @inheritParams Nasp
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
+#'
+#' @inherit Imaxrmst references
+#'
 #' @return
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1, maxE=2, m = 400, beta2=0, effect = 0.08788154, NN = 100, alpha = 0.05, beta=0.2)
+#' }
 Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
   Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
   V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN)
@@ -123,13 +151,16 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 #'
 #' @inheritParams powerasp
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#'
+#' @inherit Imaxrmst references
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=199, NN=100, alpha=0.05, beta = 0.2, max.iter=10)
+#' }
 ESrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(1-beta)

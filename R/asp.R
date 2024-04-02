@@ -10,8 +10,9 @@
 #'
 #' @details
 #'
+#' @importFrom survival coxph
 #'
-#' @references
+#' @inherit Imaxasp references
 #'
 #' @seealso survival
 #'
@@ -34,7 +35,6 @@
 #' @export
 #'
 #' @examples
-#' library(survival)
 #' t0 = 1
 #' TRT = c(rep(0,5),rep(1,5))
 #' Z = cbind(rnorm(10))

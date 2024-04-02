@@ -3,7 +3,7 @@
 #'
 #' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
 #'
-#' @details In the functions that calculate sample size, power, or effect size, Trial data are simulated using the following assumptions.
+#' @details Trial data are simulated using the following assumptions.
 #' Assume the event time for a subject follows a Weibull distribution with survival function
 #' \deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
 #' where the shape and rate parameters
@@ -24,6 +24,14 @@
 #' @param n - sample size per group
 #' @param effect - targeted effect size
 #' @param NN - number of iterations
+#'
+#'
+#' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+#' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS macro for
+#' estimation of direct adjusted survival curves based on a stratified Cox regression
+#' model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+#' @references Zucker, D.M. (1998) Restricted mean life with covariates: modification and extension
+#' of a useful survival analysis method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 #'
 #' @return
 #' @export
@@ -82,12 +90,13 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 
 
 
-#' Title
+#' @title power calculation
 #'
 #'
+#' @details See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates power given effect size and sample size.
 #'
-#'
-#' @inherit Imaxasp details
+#' @inherit Imaxasp details extra text
+#' @inherit Imaxasp references
 #'
 #' @inheritParams Imaxasp
 #' @param alpha - targeted type I error rate
@@ -115,8 +124,13 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 
 #' Title
+#' @inherit Imaxasp details
+#'
+#' @details See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates sample size given effect size and power.
 #'
 #' @inheritParams powerasp
+#'
+#'  @inherit Imaxasp references
 #' @param m - sample size used to calculate the maximum information, Imax
 #' @param beta - targeted type II error rate
 #'
@@ -145,11 +159,14 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 
 #' @title effect size
 #'
+#' @inherit Imaxasp details
 #'
+#' @details @details See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates effect size given sample size and power.
 #'
 #' @description Calculate effect size given power and sample size
 #'
-#' @details \linkSections{Imaxasp,details}
+#'
+#'  @inherit Imaxasp references
 #'
 #' @inheritParams Imaxasp
 #'

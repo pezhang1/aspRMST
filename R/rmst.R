@@ -7,6 +7,10 @@
 #' Restricted mean survival time estimates and standard error / variance estimates
 #' are also provided for each group.
 #'
+#' @inherit Imaxrmst references
+#'
+#' @importFrom survival coxph
+#'
 #' @author Peter Zhang, Brent Logan, Michael Martens
 #'
 #' @details
