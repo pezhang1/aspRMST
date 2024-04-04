@@ -5,7 +5,7 @@ Version: 0.1.0
 Date: January 20, 2024
 Author: Peter Zhang <pezhang@mcw.edu>, Brent Logan <blogan@mcw.edu>, Michael Martens <mmartens@mcw.edu>
 Maintainer: Peter Zhang <pezhang@mcw.edu>
-Depends: survival
+Depends: survival, gsDesign
 Description: Calculates the difference in adjusted survival probability (ASP) and the difference in restricted mean survival time (RMST) via treatment-stratified Cox proportional hazards models. Standard error estimates of these differences are also provided. ASP, RMST, and their standard error estimates are also provided for both the treatment group and control group.
 License: GPL-3
 RoxygenNote: 7.3.1

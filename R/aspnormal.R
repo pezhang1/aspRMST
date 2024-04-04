@@ -54,7 +54,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
     Z2 = as.matrix(rnorm(2*n))                             # covariates
     alpha = alpha0+alpha1*Z1
     gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
-    FT = rweib(2*n, alpha, gamma1)
+    FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
     CT = NULL
     if (crate == 0)
     {CT = Inf }

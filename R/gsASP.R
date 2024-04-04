@@ -37,7 +37,7 @@
 #' Z2 = as.matrix(rnorm(2*n))                             # covariates
 #' alpha = alpha0+alpha1*Z1
 #' gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
-#' FT = rweib(2*n, alpha, gamma1)
+#' FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
 #' CT = NULL
 #' if (crate == 0)
 #' {CT = Inf } else
@@ -66,7 +66,7 @@ gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
     output <- asp(t0 = t0 , X, Status1, Z1 , TRT1)
     #output <- spse(t = t0 , Time = X, Status = status, Z=as.matrix(data1[, vars]) , D=data1$treat - 1)
     spd[i] = output$SPD
-    spdse[i] = output$SE2
+    spdse[i] = output$SED
   }
   Imax = 1/spdse[length(u)]^2
   IF = (1/spdse^2)/Imax

@@ -33,7 +33,7 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
     # Z3 = (rbinom(2*n , size = 1 ,prob = p2) -p2) / sqrt(p2*(1-p2))
     alpha = alpha0+alpha1*Z1
     gamma1 = gamma0*exp(beta1*Z1 + rowSums(beta2 * Z0s))
-    FT = rweib(2*n, alpha, gamma1)
+    FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
     CT = NULL
     if (crate == 0)
     {CT = Inf }

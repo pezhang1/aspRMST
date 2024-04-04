@@ -17,8 +17,8 @@
 #'
 #' @returns
 #'  \itemize{
-#'   \item Delta - restricted mean survival time differene estimate
-#'   \item DSE2 - standard error estimate of restricted mean survival time difference estimate
+#'   \item muD - restricted mean survival time difference estimate
+#'   \item seD - standard error estimate of restricted mean survival time difference estimate
 #'   \item mu0 - restricted mean survival time of treatment group 0
 #'   \item mu1 - restricted mean survival time of treatment group 1
 #'   \item se10 - standard error of restricted mean survival time of treatment group 0
@@ -31,7 +31,7 @@
 #'
 #'
 #'
-#' @param t0 - pre-specified time point, rmst is calculated over(0, t0)
+#' @param t0 - pre-specified time point, restricted mean survival time estimate is calculated over(0, t0)
 #' @param Time - Observed times
 #' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
 #' @param Z - Non-treatment group covariates
@@ -43,7 +43,6 @@
 #'
 #'
 #' @examples
-#' library(survival)
 #' set.seed(123)
 #' t0 = 1
 #' n0 = 100
@@ -64,14 +63,14 @@
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' rmst(t0,Time,Status,Z,TRT)$Delta
-#' rmst(t0,Time,Status,Z,TRT)$DSE2
+#' rmst(t0,Time,Status,Z,TRT)$muD
+#' rmst(t0,Time,Status,Z,TRT)$SED
 #'
 rmst = function(t0,Time,Status,Z,TRT){
   # Calculate RMST difference and its standard error
 
 
-  SPSE = asp(t0,Time,Status,Z,TRT)
+  SPSE = aspinternal(t0,Time,Status,Z,TRT)
   n0 = SPSE$n0
   n1 = SPSE$n1
   n  = SPSE$n
@@ -93,7 +92,7 @@ rmst = function(t0,Time,Status,Z,TRT){
   cs0 = matrix(0,dim(Z)[1],length(x0))
   for(k in 1:length(x0))
   {
-    spse0      = asp(x0[k],Time,Status,Z,TRT)
+    spse0      = aspinternal(x0[k],Time,Status,Z,TRT)
     sp0[k]     = spse0$S0
     C01[k]     = spse0$c01
     Gamma0[k]  = spse0$gamma0
@@ -125,7 +124,7 @@ rmst = function(t0,Time,Status,Z,TRT){
   cs1 = matrix(0,dim(Z)[1],length(x1))
   for(k in 1:length(x1))
   {
-    spse1      = asp(x1[k],Time,Status,Z,TRT)
+    spse1      = aspinternal(x1[k],Time,Status,Z,TRT)
     sp1[k]     = spse1$S1
     C11[k]     = spse1$c11
     Gamma1[k]  = spse1$gamma1
@@ -170,8 +169,8 @@ rmst = function(t0,Time,Status,Z,TRT){
   DV2 = DV1 + DeltaV/n
   DSE2 = sqrt(DV2)
 
-  list(mu0=mu0,mu1=mu1,Delta=Delta,DSE2=DSE2,
-       se10=se10, se11=se11)
+  list(mu0=mu0,mu1=mu1,muD=Delta,SED=DSE2,
+       SE0=se10, SE1=se11)
 }
 
 

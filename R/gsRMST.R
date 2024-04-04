@@ -3,17 +3,47 @@
 
 #' Title
 #'
-#' @param t0 -  pre-specified time point
-#' @param Time  - Observed times
-#' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
-#' @param Z - Non-treatment group covariates
-#' @param TRT  - Treatment group indicator (0 = Control, 1 = Treatment)
-#' @param E E - Enrollment times
-#' @param alpha  - Targeted type I error rate
-#' @param u - Calendar times of analysis
+#' @inherit Imaxrmst references
+#'
+#' @inheritParams gsASP
 #'
 #' @return
 #' @export
+#'
+#'
+#'
+#' @seealso gsDesign
+#'
+#' @example
+#' \dontrun{
+#' alpha0 = 1.5
+#' alpha1 = -0.3
+#' beta1 = -0.61335306
+#' n=200
+#' crate =0
+#' beta2=0
+#' t0=1
+#' gamma0 = -log(0.4)
+#' maxE = 2
+#' u = c(1.3, 1.8, 3)
+#' E = runif(2*n, min=0, max=maxE)          # enrollment times
+#' Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
+#' Z2 = as.matrix(rnorm(2*n))                             # covariates
+#' alpha = alpha0+alpha1*Z1
+#' gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+#' FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
+#' CT = NULL
+#' if (crate == 0)
+#' {CT = Inf } else
+#' {CT = rexp(2*n, rate=crate)}
+#' Data = cbind(E,FT,CT,Z1,Z2)
+#' delta = as.numeric(FT < CT)
+#' test <- gsRMST(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
+#' test$Z
+#' test$Crit
+#' }
+#'
+#'
 #'
 #'
 gsRMST = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
@@ -30,8 +60,8 @@ gsRMST = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
     X = pmin( Time1, u[i]-E1,t0)
     output <- rmst(t0 = t0 , X, Status1, Z1 , TRT1)
     #output <- spse(t = t0 , Time = X, Status = status, Z=as.matrix(data1[, vars]) , D=data1$treat - 1)
-    rmstdiff[i] = output$Delta
-    rmstdiffse[i] = output$DSE2
+    rmstdiff[i] = output$muD
+    rmstdiffse[i] = output$SED
   }
   Imax = 1/rmstdiffse[length(u)]^2
   IF = (1/rmstdiffse^2)/Imax
