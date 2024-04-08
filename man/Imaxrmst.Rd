@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmstnormal.R
 \name{Imaxrmst}
 \alias{Imaxrmst}
-\title{Title}
+\title{Maximun information for adjusted restricted mean survival times for normal covariates}
 \usage{
 Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 }
@@ -28,10 +28,37 @@ Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 \item{NN}{- number of iterations}
 }
 \description{
-Title
+Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
+}
+\details{
+Trial data are simulated using the following assumptions.
+Assume the event time for a subject follows a Weibull distribution with survival function
+\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
+where the shape and rate parameters
+\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
+and \eqn{\mathbf{Z}} (vector of baseline covariates):
+ \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
+\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
+simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
 }
 \examples{
 \dontrun{
+set.seed(1234)
+Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect=0.08788154, NN = 100)
 }
 
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

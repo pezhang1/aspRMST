@@ -1,15 +1,13 @@
-
-#' @title Imaxaspbinary
-#'
+#' Maximum information for adjusted survival probabilities for binary covariates
 #'
 #' @inherit Imaxasp details
 #'
-#'  @inherit Imaxasp references
+#' @inherit Imaxasp references
 #'
 #' @inheritParams Imaxasp
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -70,12 +68,11 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
 #' @inherit Imaxasp details
 #'
 #' @inheritParams powerasp
-#'
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#'  @inherit Imaxasp references
 #'
-#' @return
+#' @inherit Imaxasp references
+#'
 #' @export
 #'
 #' @examples
@@ -102,13 +99,15 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #'
 #' @inherit Imaxasp details
 #'
+#' @inherit Imaxasp references
+#'
 #' @inheritParams Nasp
 #'
-#'  @inherit Imaxasp references
+#'
 #'
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -148,11 +147,11 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect
 #'
 #' @inherit Imaxasp details
 #'
-#'  @inherit Imaxasp references
+#' @inherit Imaxasp references
 #'
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmstbinary.R
 \name{Imaxrmstbinary}
 \alias{Imaxrmstbinary}
-\title{Title}
+\title{Maximun information for adjusted restricted mean survival times for binary covariates}
 \usage{
 Imaxrmstbinary(
   alpha0,
@@ -39,11 +39,24 @@ Imaxrmstbinary(
 
 \item{NN}{- number of iterations}
 
-\item{p}{- vector of probabilities for non-treatment group binary variables}
+\item{p}{- vector of probabilities for binary covariates}
 }
 \description{
-Title
+Maximun information for adjusted restricted mean survival times for binary covariates
 }
 \examples{
 \dontrun{}
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

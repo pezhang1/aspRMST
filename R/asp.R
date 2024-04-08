@@ -1,36 +1,38 @@
-#' asp
+#' Adjusted survival probability
 #'
-#' @description Calculates adjusted survival probability difference between two treatment groups
+#' @inherit Imaxasp references
+#' @description Calculates the adjusted survival probability difference between two treatment groups
 #' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
-#' Variance and standard error estimates for the difference are also calculated.
-#' Adjusted survival probability estimates and standard error / variance estimates
+#' Standard error estimates for the estimated difference are also calculated.
+#' Adjusted survival probability estimates and standard error estimates
 #' are also provided for each group.
 #'
 #' @author Peter Zhang, Brent Logan, Michael Martens
 #'
-#' @details
 #'
+#'
+#' @import stats
 #' @importFrom survival coxph
 #'
-#' @inherit Imaxasp references
+#'
 #'
 #' @seealso survival
 #'
 #'
 #' @param t0 - pre-specified time point of analysis
-#' @param Time - Observed Times
-#' @param Status - Censoring Status (0 = Censored, 1 = Observed)
+#' @param Time - Observed imes
+#' @param Status - Censoring status (0 = censored, 1 = observed)
 #' @param Z - Non-treatment group covariates
-#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
+#' @param TRT - Treatment group indicator (0 = control, 1 = treatment)
 #'
 #' @returns
 #'  \itemize{
 #'   \item SPD - adjusted survival probability difference estimate
 #'   \item SED - standard error estimate of adjusted survival probability difference estimate
-#'   \item S0 - adjusted survival probability of treatment group 0
-#'   \item S1 - adjusted survival probability of treatment group 1
-#'   \item se10 - standard error of adjusted survival probability of treatment group 0
-#'   \item se11 - standard error of adjusted survival probability of treatment group 1
+#'   \item S0 - adjusted survival probability estimate for treatment group 0
+#'   \item S1 - adjusted survival probability estimate for treatment group 1
+#'   \item SE0 - standard error estimate of adjusted survival probability estimate for treatment group 0
+#'   \item SE1 - standard error estimate of adjusted survival probability estimate for treatment group 1
 #' }
 #' @export
 #'
@@ -45,7 +47,7 @@
 #' Time = pmin(X,t0)
 #' output = asp(t0,Time,Status,Z,TRT)
 #' output$SPD
-#' output$SE2
+#' output$SED
 asp = function(t0,Time,Status,Z,TRT) {
   n= length(TRT)
   n1 = sum(TRT)
@@ -161,18 +163,22 @@ asp = function(t0,Time,Status,Z,TRT) {
 
 #' Title
 #'
-#' @param t0
-#' @param Time
-#' @param Status
-#' @param Z
-#' @param TRT
+#' @inheritParams asp
 #'
-#' @return
+#' @returns
+#'  \itemize{
+#'   \item SPD - adjusted survival probability difference estimate
+#'   \item SED - standard error estimate of adjusted survival probability difference estimate
+#'   \item S0 - adjusted survival probability of treatment group 0
+#'   \item S1 - adjusted survival probability of treatment group 1
+#'   \item se10 - standard error of adjusted survival probability of treatment group 0
+#'   \item se11 - standard error of adjusted survival probability of treatment group 1
+#' }
 #' @export
 #'
 #' @keywords internal
 #'
-#' @examples
+#'
 aspinternal = function(t0,Time,Status,Z,TRT) {
   n= length(TRT)
   n1 = sum(TRT)

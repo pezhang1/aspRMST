@@ -1,4 +1,4 @@
-#' @title Restricted Mean Survival Time
+#' Restricted Mean Survival Time
 #'
 #'
 #' @description Calculates restricted mean survival time difference between two treatment groups
@@ -9,11 +9,12 @@
 #'
 #' @inherit Imaxrmst references
 #'
+#' @import stats
 #' @importFrom survival coxph
 #'
 #' @author Peter Zhang, Brent Logan, Michael Martens
 #'
-#' @details
+#' @details Calculates ...
 #'
 #' @returns
 #'  \itemize{
@@ -25,7 +26,7 @@
 #'   \item se11 - standard error of restricted mean survival time of treatment group 1
 #' }
 #'
-#' @references
+#' @references ...
 #'
 #' @seealso survival
 #'
@@ -37,7 +38,17 @@
 #' @param Z - Non-treatment group covariates
 #' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #'
-#' @return
+#' @returns
+#'  \itemize{
+#'   \item muD - adjusted survival probability difference estimate
+#'   \item SED - standard error estimate of adjusted survival probability difference estimate
+#'   \item mu0 - adjusted survival probability of treatment group 0
+#'   \item mu1 - adjusted survival probability of treatment group 1
+#'   \item SE0 - standard error of adjusted survival probability of treatment group 0
+#'   \item SE1 - standard error of adjusted survival probability of treatment group 1
+#' }
+#'
+#'
 #' @export
 #'
 #'

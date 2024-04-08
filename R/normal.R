@@ -7,7 +7,7 @@
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
 #' @param effect - targeted effect size
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -43,7 +43,7 @@ root = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
 #' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
 #' @param effect - targeted effect size
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

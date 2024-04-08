@@ -39,25 +39,41 @@ ESaspbinary(
 
 \item{NN}{- number of iterations}
 
-\item{alpha}{\itemize{
-\item targeted type I error rate
-}}
+\item{alpha}{- targeted type I error rate}
 
-\item{beta}{\itemize{
-\item targeted type II error rate
-}}
+\item{beta}{- targeted type II error rate}
 
-\item{max.iter}{\itemize{
-\item maximum number of iterations to calculate the effect size
-}}
+\item{max.iter}{- maximum number of iterations to calculate the effect size}
 
 \item{p}{- vector of probabilities for non-treatment group binary variables}
 }
 \description{
 Title
 }
+\details{
+Trial data are simulated using the following assumptions.
+Assume the event time for a subject follows a Weibull distribution with survival function
+\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
+where the shape and rate parameters
+\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
+and \eqn{\mathbf{Z}} (vector of baseline covariates):
+ \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
+\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
+simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
+}
 \examples{
 \dontrun{
 ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=212, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10)
 }
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

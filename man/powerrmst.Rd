@@ -17,7 +17,9 @@ powerrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha)
 
 \item{crate}{- censoring rate, assumes an exponential distribution}
 
-\item{t0}{- pre-specified time at which adjusted restricted mean survival times for each group are calculated}
+\item{t0}{- pre-specified time at which adjusted restricted mean survival times for each group are calculated
+
+ @inherit Imaxrmst references}
 
 \item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
 
@@ -32,8 +34,14 @@ powerrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha)
 \description{
 Title
 }
+\details{
+See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates power given effect size and sample size.
+}
 \examples{
-\dontrun{}
+\dontrun{
+set.seed(1234)
+powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=199, effect=0.08788154, NN=200, alpha=0.05)
+}
 
 
 }

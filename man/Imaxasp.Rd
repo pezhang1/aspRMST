@@ -2,7 +2,7 @@
 % Please edit documentation in R/aspnormal.R
 \name{Imaxasp}
 \alias{Imaxasp}
-\title{Adjusted survival probabilities for normal outcomes}
+\title{Maximun information for adjusted survival probabilities for normal covariates}
 \usage{
 Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 }
@@ -31,7 +31,7 @@ Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
 Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
 }
 \details{
-In the functions that calculate sample size, power, or effect size, Trial data are simulated using the following assumptions.
+Trial data are simulated using the following assumptions.
 Assume the event time for a subject follows a Weibull distribution with survival function
 \deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
 where the shape and rate parameters
@@ -46,4 +46,14 @@ simulate trial data under a proportional hazards model, delayed effect setting, 
 \dontrun{
 Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect=0, NN=10000)
 }
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

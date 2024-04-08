@@ -2,40 +2,39 @@
 % Please edit documentation in R/asp.R
 \name{asp}
 \alias{asp}
-\title{asp}
+\title{Adjusted survival probability}
 \usage{
 asp(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- time point of analysis}
+\item{t0}{- pre-specified time point of analysis}
 
-\item{Time}{- Observed Times (0 = Observed, 1 = Censored)}
+\item{Time}{- Observed imes}
 
-\item{Status}{- Censoring Status (0 = Censored, 1 = Observed)}
+\item{Status}{- Censoring status (0 = censored, 1 = observed)}
 
-\item{Z}{- Non-treatment groupcovariates}
+\item{Z}{- Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
+\item{TRT}{- Treatment group indicator (0 = control, 1 = treatment)}
 }
 \value{
 \itemize{
-  \item SPD - restricted mean survival time differene estimate
-  \item SE2 - standard error estimate of restricted mean survival time difference estimate
-  \item S0 - adjusted survival probability of treatment group 0
-  \item S1 - adjusted survival probability of treatment group 1
-  \item se10 - standard error of adjusted survival probability of treatment group 0
-  \item se11 - standard error of adjusted survival probability of treatment group 1
+  \item SPD - adjusted survival probability difference estimate
+  \item SED - standard error estimate of adjusted survival probability difference estimate
+  \item S0 - adjusted survival probability estimate for treatment group 0
+  \item S1 - adjusted survival probability estimate for treatment group 1
+  \item SE0 - standard error estimate of adjusted survival probability estimate for treatment group 0
+  \item SE1 - standard error estimate of adjusted survival probability estimate for treatment group 1
 }
 }
 \description{
-Calculates adjusted survival probability difference between two treatment groups
+Calculates the adjusted survival probability difference between two treatment groups
 at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
-Variance and standard error estimates for the difference are also calculated.
-Adjusted survival probability estimates and standard error / variance estimates
+Standard error estimates for the estimated difference are also calculated.
+Adjusted survival probability estimates and standard error estimates
 are also provided for each group.
 }
 \examples{
-library(survival)
 t0 = 1
 TRT = c(rep(0,5),rep(1,5))
 Z = cbind(rnorm(10))
@@ -46,7 +45,17 @@ Status = as.numeric(FT <= CT)     & (X <= t0)
 Time = pmin(X,t0)
 output = asp(t0,Time,Status,Z,TRT)
 output$SPD
-output$SE2
+output$SED
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }
 \seealso{
 survival

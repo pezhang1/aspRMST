@@ -15,10 +15,14 @@
 #'
 #' @seealso gsDesign
 #'
-#' @return
+#'  @return
+#'  \itemize{
+#'   \item Z - Test statistics
+#'   \item Crit - Critical values
+#'    }
 #' @export
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' library(survival)
 #'

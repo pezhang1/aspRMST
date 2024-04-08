@@ -7,7 +7,7 @@
 rmst(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- pre-specified time point, rmst is calculated over(0, t0)}
+\item{t0}{- pre-specified time point, restricted mean survival time estimate is calculated over(0, t0)}
 
 \item{Time}{- Observed times}
 
@@ -19,12 +19,21 @@ rmst(t0, Time, Status, Z, TRT)
 }
 \value{
 \itemize{
-  \item Delta - restricted mean survival time differene estimate
-  \item DSE2 - standard error estimate of restricted mean survival time difference estimate
+  \item muD - restricted mean survival time difference estimate
+  \item seD - standard error estimate of restricted mean survival time difference estimate
   \item mu0 - restricted mean survival time of treatment group 0
   \item mu1 - restricted mean survival time of treatment group 1
   \item se10 - standard error of restricted mean survival time of treatment group 0
   \item se11 - standard error of restricted mean survival time of treatment group 1
+}
+
+\itemize{
+  \item muD - adjusted survival probability difference estimate
+  \item SED - standard error estimate of adjusted survival probability difference estimate
+  \item mu0 - adjusted survival probability of treatment group 0
+  \item mu1 - adjusted survival probability of treatment group 1
+  \item SE0 - standard error of adjusted survival probability of treatment group 0
+  \item SE1 - standard error of adjusted survival probability of treatment group 1
 }
 }
 \description{
@@ -34,8 +43,10 @@ Variance and standard error estimates for the difference are also calculated.
 Restricted mean survival time estimates and standard error / variance estimates
 are also provided for each group.
 }
+\details{
+Calculates ...
+}
 \examples{
-library(survival)
 set.seed(123)
 t0 = 1
 n0 = 100
@@ -56,9 +67,12 @@ CT = rexp(n, rate=crate)
 X = pmin(FT,CT)
 Status = as.numeric(FT <= CT)     & (X <= t0)
 Time = pmin(X,t0)
-rmst(t0,Time,Status,Z,TRT)$Delta
-rmst(t0,Time,Status,Z,TRT)$DSE2
+rmst(t0,Time,Status,Z,TRT)$muD
+rmst(t0,Time,Status,Z,TRT)$SED
 
+}
+\references{
+...
 }
 \seealso{
 survival

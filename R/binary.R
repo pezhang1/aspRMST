@@ -8,7 +8,7 @@
 #' @param effect - targeted effect size
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -74,7 +74,7 @@ rootbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p ) {
 #' @param effect - targeted effect size
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

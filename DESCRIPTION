@@ -1,12 +1,12 @@
 Package: aspRMST
 Type: Package
-Title: Calculates adjusted survival probability (ASP) estimates and restricted mean survival time (RMST) estimates
+Title: Calculations adjusted survival probability (ASP) and adjusted restricted mean survival time (ARMST)
 Version: 0.1.0
-Date: January 20, 2024
+Date: April 30, 2024
 Author: Peter Zhang <pezhang@mcw.edu>, Brent Logan <blogan@mcw.edu>, Michael Martens <mmartens@mcw.edu>
 Maintainer: Peter Zhang <pezhang@mcw.edu>
-Depends: survival, gsDesign
-Description: Calculates the difference in adjusted survival probability (ASP) and the difference in restricted mean survival time (RMST) via treatment-stratified Cox proportional hazards models. Standard error estimates of these differences are also provided. ASP, RMST, and their standard error estimates are also provided for both the treatment group and control group.
+Depends: survival, gsDesign, stats
+Description: Calculates the estimated difference in ASPs and the difference in ARMSTs via treatment-stratified Cox proportional hazards models. Standard error estimates of these estimated differences are also provided. Sample size, power, and effect size calculations are also included, as well as function to analyze data using ASPs and ARMSTs.
 License: GPL-3
 RoxygenNote: 7.3.1
 Encoding: UTF-8
@@ -15,8 +15,6 @@ URL: https://github.com/pezhang1/aspRMST
 BugReports: https://github.com/pezhang1/aspRMST/issues
 Collate: 
     'asp.R'
-    'gsASP.R'
-    'gsRMST.R'
     'rmst.R'
     'binary.R'
     'aspbinary.R'
@@ -24,4 +22,5 @@ Collate:
     'normal.R'
     'aspnormal.R'
     'rmstnormal.R'
-    'functions.R'
+    'gsASP.R'
+    'gsRMST.R'

@@ -1,13 +1,13 @@
 
 
-#' Title
+#' Maximun information for adjusted restricted mean survival times for binary covariates
 #'
 #' @inheritParams Imaxrmst
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param p - vector of probabilities for binary covariates
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -64,12 +64,14 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 #' Title
 #'
+#' @inherit powerasp details
+#'
 #' @inheritParams powerrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -89,12 +91,14 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 
 #' Title
 #'
+#' @inherit powerasp details
+#'
 #' @inheritParams Nrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -112,12 +116,14 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 
 #' Title
 #'
+#' @inherit powerasp details
+#'
 #' @inheritParams ESrmst
 #' @param p - vector of probabilities for non-treatment group binary variables
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

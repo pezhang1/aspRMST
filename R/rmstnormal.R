@@ -1,21 +1,23 @@
 
-#' Title
+#' Maximun information for adjusted restricted mean survival times for normal covariates
+#'
+#' @inherit Imaxasp
 #'
 #' @inheritParams Imaxasp
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @return
+#'
 #' @export
 #'
 #'
 #'
 #' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
-#' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS macro for
-#' estimation of direct adjusted survival curves based on a stratified Cox regression
-#' model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
-#' @references Zhang, X. (2013). omparison of restricted mean survival times between treatments
-#' based on a stratified cox model. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
-#' @references Zucker, D.M. (1998) Restricted mean life with covariates: modification and extension
-#' of a useful survival analysis method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
+#' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+#' Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+#' Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+#' @references Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+#' Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+#' @references Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+#' of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 #'
 #'
 #'
@@ -80,6 +82,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 #' Title
 #'
+#' @inherit powerasp details
 #'
 #' @inheritParams powerasp
 #'
@@ -87,7 +90,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
 #'
 #'  @inherit Imaxrmst references
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -118,12 +121,14 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 
 #' Title
 #'
+#' @inherit powerasp details
+#'
 #' @inheritParams Nasp
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples
@@ -149,11 +154,14 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 
 #' Title
 #'
-#' @inheritParams powerasp
+#' @inherit powerasp details
+#'
+#' @inheritParams ESasp
 #' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
+#'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#'
 #' @export
 #'
 #' @examples

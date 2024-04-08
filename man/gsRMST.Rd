@@ -17,12 +17,67 @@ gsRMST(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
 
 \item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
 
-\item{E}{E - Enrollment times}
+\item{E}{- Enrollment times}
 
 \item{alpha}{- Targeted type I error rate}
 
 \item{u}{- Calendar times of analysis}
 }
+\value{
+\itemize{
+  \item Z - Test statistics
+  \item Crit - Critical values
+   }
+}
 \description{
 Title
+}
+\examples{
+\dontrun{
+alpha0 = 1.5
+alpha1 = -0.3
+beta1 = -0.61335306
+n=200
+crate =0
+beta2=0
+t0=1
+gamma0 = -log(0.4)
+maxE = 2
+u = c(1.3, 1.8, 3)
+E = runif(2*n, min=0, max=maxE)          # enrollment times
+Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
+Z2 = as.matrix(rnorm(2*n))                             # covariates
+alpha = alpha0+alpha1*Z1
+gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
+CT = NULL
+if (crate == 0)
+{CT = Inf } else
+{CT = rexp(2*n, rate=crate)}
+Data = cbind(E,FT,CT,Z1,Z2)
+delta = as.numeric(FT < CT)
+test <- gsRMST(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
+test$Z
+test$Crit
+}
+
+
+
+
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
+}
+\seealso{
+gsDesign
 }

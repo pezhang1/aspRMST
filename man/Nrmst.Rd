@@ -47,6 +47,25 @@ Nrmst(
 \description{
 Title
 }
+\details{
+See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates power given effect size and sample size.
+}
 \examples{
-\dontrun{}
+\dontrun{
+set.seed(1234)
+Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1, maxE=2, m = 400, beta2=0, effect = 0.08788154, NN = 100, alpha = 0.05, beta=0.2)
+}
+}
+\references{
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

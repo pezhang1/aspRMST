@@ -8,13 +8,17 @@
 #' @inheritParams gsASP
 #'
 #' @return
+#'  \itemize{
+#'   \item Z - Test statistics
+#'   \item Crit - Critical values
+#'    }
 #' @export
 #'
 #'
 #'
 #' @seealso gsDesign
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' alpha0 = 1.5
 #' alpha1 = -0.3
