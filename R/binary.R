@@ -1,19 +1,21 @@
-#' Title
+#' @title Calculates \eqn{\beta_W} given a RMST effect size
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 - vector of coefficients for non-treatment group binary variables
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param effect - targeted effect size
-#' @param p - vector of probabilities for non-treatment group binary variables
+#'
+#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given RMST effect size
+#'
+#' @inherit Imaxasp details
+#'
+#' @inheritParams  rootrmst
+#' @param p - Vector of probabilities for binary covariates
+#'
 #'
 #'
 #' @export
 #'
 #' @examples
-#' rootbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2 =0, t0 = 1, effect=0.1, p =c(0.2,0.5))
-rootbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p ) {
+#' rootrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2 =0, t0 = 1,
+#'  effect=0.1, p =c(0.2,0.5))
+rootrmstbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p ) {
 
 
   Diff=function(beta1)
@@ -64,21 +66,22 @@ rootbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p ) {
 
 
 
-#' Title
+#' @title Calculates \eqn{\beta_W} given a SP effect size
 #'
-#' @param alpha0 - parameter to specify in Weibull model
-#' @param alpha1 - parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model
-#' @param beta2 - vector of coefficients for non-treatment group binary variables
-#' @param t0 - pre-specified time at which adjusted survival probabilities for each group are calculated
-#' @param effect - targeted effect size
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
+#'
+#' @inherit Imaxasp details
+#'
+#' @inheritParams  rootasp
+#'
+#' @param p - Vector of probabilities for binary covariates
 #'
 #'
 #' @export
 #'
 #' @examples
-#' rootaspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0 = 1, effect=0.1334313, p =c(0.2,0.5))
+#' rootaspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0 = 1,
+#' effect=0.1334313, p =c(0.2,0.5))
 rootaspbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p) {
 
 

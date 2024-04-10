@@ -1,9 +1,10 @@
 
 
-#' Maximun information for adjusted restricted mean survival times for binary covariates
+#' @title Calculates \eqn{I_{max}} for adjusted SPs for binary covariates
 #'
 #' @inheritParams Imaxrmst
-#' @param p - vector of probabilities for binary covariates
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #' @inherit Imaxrmst references
 #'
@@ -11,10 +12,13 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#'  maxE=200, n=200, effect=0.08785219, NN=100,p=c(0.5,0.3) )
+#' }
 Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p ) {
   minE = 0
-  beta1 = rootbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
+  beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
   umax = t0 + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
@@ -47,8 +51,8 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
     # do rmst calculations
 
     rmstest = rmst(t0 = t0, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
-    rmst.diff.est[i] = rmstest$Delta
-    rmst.diff.se[i] = as.numeric(rmstest$DSE2)
+    rmst.diff.est[i] = rmstest$muD
+ #   rmst.diff.se[i] = as.numeric(rmstest$SED)
     #adjsp.diff.ci = adjsp.diff.est + c(-1,1)*qnorm(1-type1/2)*adjsp.diff.se
     #adjsp.Z = adjsp.diff.est / adjsp.diff.se
     #cbind(adjsp.diff.est, adjsp.diff.se, adjsp.Z, adjsp.diff.ci[1], adjsp.diff.ci[2])
@@ -62,12 +66,13 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 
 
-#' Title
+#' @title Power calculation for binary covariates
 #'
 #' @inherit powerasp details
 #'
 #' @inheritParams powerrmst
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #' @inherit Imaxrmst references
 #'
@@ -75,7 +80,11 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' powerrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' maxE=2, n=196, effect = 0.08785219, NN=100, alpha=0.05, p=c(0.5, 0.3))
+#' }
 powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p)
   V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN,p)
@@ -89,12 +98,13 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 
 
 
-#' Title
+#' @title Sample size calculation for binary covariates
 #'
 #' @inherit powerasp details
 #'
 #' @inheritParams Nrmst
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #' @inherit Imaxrmst references
 #'
@@ -102,7 +112,11 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' maxE=2, m=400, effect=0.08785219, NN=100, alpha=0.05, beta=0.2, p=c(0.5,0.3))
+#' }
 Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN,p)
   V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN,p)
@@ -114,12 +128,13 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 
 
 
-#' Title
+#' @title Effect size calculation for binary covariates
 #'
 #' @inherit powerasp details
 #'
 #' @inheritParams ESrmst
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #' @inherit Imaxrmst references
 #'
@@ -127,7 +142,11 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 #' @export
 #'
 #' @examples
-#' \dontrun{}
+#' \dontrun{
+#' set.seed(1234)
+#' ESrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' maxE=2, n=196, NN=100, alpha=0.05, beta = 0.2, max.iter=10, p=c(0.5, 0.3))
+#' }
 ESrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter=10,p){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(1-beta)
@@ -152,10 +171,10 @@ ESrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, 
       if (V11 > V10)
       {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
-        beta1 = rootbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
+        beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
       }    else {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
-        beta1 =  rootbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
+        beta1 =  rootrmstbinary(alpha0, alpha1, gamma0, beta2, t0, effect,p)
       }
       break
     }

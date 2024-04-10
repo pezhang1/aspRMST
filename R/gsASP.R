@@ -1,24 +1,29 @@
-#' gsASP
+#' Group sequential test of adjusted SPs
+#'
+#' @description Performs a group sequential test of adjusted SPs between two treatment groups
+#' when provided the time point of analysis, the observed times, censoring indicator,
+#' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
+#'
 #'
 #' @inherit Imaxasp references
 #'
-#' @param t0 -  pre-specified time point
+#' @param t0 -  Pre-specified time point of analysis
 #' @param Time - Observed times
-#' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
+#' @param Status - Censoring indicator (0 = censored, 1 = observed)
 #' @param Z - Non-treatment group covariates
 #' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #' @param E - Enrollment times
 #' @param alpha - Targeted type I error rate
 #' @param u - Calendar times of analysis
 #'
-#' @importFrom gsDesign gsDesign
 #'
-#' @seealso gsDesign
+#'
+#'
 #'
 #'  @return
 #'  \itemize{
-#'   \item Z - Test statistics
-#'   \item Crit - Critical values
+#'   \item Z - Vector of test statistics
+#'   \item Crit - Vector of tritical values
 #'    }
 #' @export
 #'

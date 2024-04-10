@@ -1,10 +1,10 @@
-#' Restricted Mean Survival Time
+#' RMST
 #'
 #'
-#' @description Calculates restricted mean survival time difference between two treatment groups
+#' @description Calculates RMST difference between two treatment groups
 #' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
-#' Variance and standard error estimates for the difference are also calculated.
-#' Restricted mean survival time estimates and standard error / variance estimates
+#' Standard error estimates for the estimated differences are also calculated.
+#' RMST estimates and standard error estimates
 #' are also provided for each group.
 #'
 #' @inherit Imaxrmst references
@@ -12,27 +12,19 @@
 #' @import stats
 #' @importFrom survival coxph
 #'
-#' @author Peter Zhang, Brent Logan, Michael Martens
-#'
-#' @details Calculates ...
-#'
-#' @returns
-#'  \itemize{
-#'   \item muD - restricted mean survival time difference estimate
-#'   \item seD - standard error estimate of restricted mean survival time difference estimate
-#'   \item mu0 - restricted mean survival time of treatment group 0
-#'   \item mu1 - restricted mean survival time of treatment group 1
-#'   \item se10 - standard error of restricted mean survival time of treatment group 0
-#'   \item se11 - standard error of restricted mean survival time of treatment group 1
-#' }
-#'
-#' @references ...
-#'
-#' @seealso survival
 #'
 #'
 #'
-#' @param t0 - pre-specified time point, restricted mean survival time estimate is calculated over(0, t0)
+#'
+#'
+#'
+#' @inherit Imaxrmst references
+#'
+#'
+#'
+#'
+#'
+#' @param t0 - Pre-specified time point, RMST estimate is calculated over(0, t0)
 #' @param Time - Observed times
 #' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
 #' @param Z - Non-treatment group covariates
@@ -40,12 +32,12 @@
 #'
 #' @returns
 #'  \itemize{
-#'   \item muD - adjusted survival probability difference estimate
-#'   \item SED - standard error estimate of adjusted survival probability difference estimate
-#'   \item mu0 - adjusted survival probability of treatment group 0
-#'   \item mu1 - adjusted survival probability of treatment group 1
-#'   \item SE0 - standard error of adjusted survival probability of treatment group 0
-#'   \item SE1 - standard error of adjusted survival probability of treatment group 1
+#'   \item muD - Adjusted SP difference estimate
+#'   \item SED - Standard error estimate of adjusted SP difference estimate
+#'   \item mu0 - Adjusted SP of treatment group 0
+#'   \item mu1 - Adjusted SP of treatment group 1
+#'   \item SE0 - Standard error of adjusted SP of treatment group 0
+#'   \item SE1 - Standard error of adjusted SP of treatment group 1
 #' }
 #'
 #'

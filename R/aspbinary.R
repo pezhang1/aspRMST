@@ -1,18 +1,20 @@
-#' Maximum information for adjusted survival probabilities for binary covariates
+#' @title Calculates \eqn{I_{max}} for adjusted SPs for binary covariates
 #'
 #' @inherit Imaxasp details
 #'
 #' @inherit Imaxasp references
 #'
 #' @inheritParams Imaxasp
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
+#' Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
 #' }
 Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p) {
   asp.diff.est = NULL
@@ -63,12 +65,13 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
 }
 
 
-#' Title
+#' @title Power calculation for binary covariates
 #'
-#' @inherit Imaxasp details
+#' @inherit powerasp details
 #'
 #' @inheritParams powerasp
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #'
 #' @inherit Imaxasp references
@@ -77,7 +80,8 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
 #'
 #' @examples
 #' \dontrun{
-#' poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=212, effect=0.1334313, NN=10000, alpha = 0.05, p =c(0.5, 0.3))
+#' poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' maxE=2, n=212, effect=0.1334313, NN=10000, alpha = 0.05, p =c(0.5, 0.3))
 #' }
 poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha=0.05,p) {
   Veffect = 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p)
@@ -95,25 +99,25 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 
 
-#' Title
+#' @title Sample size calculation for binary covariates
 #'
-#' @inherit Imaxasp details
+#' @inherit Nasp details
 #'
 #' @inherit Imaxasp references
 #'
 #' @inheritParams Nasp
+#' @param beta2 - Vector of coefficients for binary covariates
 #'
 #'
-#'
-#' @param p - vector of probabilities for non-treatment group binary variables
-#'
+#' @param p - Vector of probabilities for binary covariates
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
-#' Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, m=400, effect=0.1334313, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3))
+#' Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#'  maxE=2, m=400, effect=0.1334313, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3))
 
 #' }
 #'
@@ -141,22 +145,23 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect
 
 
 
-#' Title
+#' @title Effect size calculation for binary covariates
 #'
 #' @inheritParams ESasp
 #'
-#' @inherit Imaxasp details
+#' @inherit ESasp details
 #'
 #' @inherit Imaxasp references
-#'
-#' @param p - vector of probabilities for non-treatment group binary variables
+#' @param beta2 - Vector of coefficients for binary covariates
+#' @param p - Vector of probabilities for binary covariates
 #'
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=212, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10)
+#' ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta2=0, crate=0, t0=1,
+#'  maxE=2, n=212, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10)
 #' }
 ESaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter, p){
   zalpha = qnorm(1-alpha/2)

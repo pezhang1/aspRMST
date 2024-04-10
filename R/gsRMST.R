@@ -1,22 +1,26 @@
 
 
 
-#' Title
+#' Group sequential test of adjusted RMSTs
 #'
 #' @inherit Imaxrmst references
+#'
+#' @description Performs a group sequential test of adjusted RMSTs between two treatment groups
+#' when provided the time point of analysis, the observed times, censoring indicator,
+#' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 #'
 #' @inheritParams gsASP
 #'
 #' @return
 #'  \itemize{
-#'   \item Z - Test statistics
-#'   \item Crit - Critical values
+#'   \item Z - Vector of test statistics
+#'   \item Crit - Vector of critical values
 #'    }
 #' @export
 #'
 #'
 #'
-#' @seealso gsDesign
+#'
 #'
 #' @examples
 #' \dontrun{
