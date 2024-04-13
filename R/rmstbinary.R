@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#'  maxE=200, n=200, effect=0.08785219, NN=100,p=c(0.5,0.3) )
+#'  maxE=200, n=200, effect=0.088, NN=100,p=c(0.5,0.3) )
 #' }
 Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p ) {
   minE = 0
@@ -83,7 +83,7 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #' \dontrun{
 #' set.seed(1234)
 #' powerrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=196, effect = 0.08785219, NN=100, alpha=0.05, p=c(0.5, 0.3))
+#' maxE=2, n=196, effect = 0.088, NN=100, alpha=0.05, p=c(0.5, 0.3))
 #' }
 powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p)
@@ -115,7 +115,7 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 #' \dontrun{
 #' set.seed(1234)
 #' Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, m=400, effect=0.08785219, NN=100, alpha=0.05, beta=0.2, p=c(0.5,0.3))
+#' maxE=2, m=400, effect=0.088, NN=100, alpha=0.05, beta=0.2, p=c(0.5,0.3))
 #' }
 Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta,p) {
   Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN,p)

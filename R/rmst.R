@@ -26,7 +26,7 @@
 #'
 #' @param t0 - Pre-specified time point, RMST estimate is calculated over(0, t0)
 #' @param Time - Observed times
-#' @param Status - Censoring indicator (0 = Censored, 1 = Observed)
+#' @param Status - Event indicator (0 = Censored, 1 = Observed)
 #' @param Z - Non-treatment group covariates
 #' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #'

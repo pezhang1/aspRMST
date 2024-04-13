@@ -21,7 +21,7 @@
 #'
 #' @param t0 - Pre-specified time point of analysis
 #' @param Time - Observed times
-#' @param Status - Censoring status (0 = censored, 1 = observed)
+#' @param Status - Event indicator (0 = censored, 1 = observed)
 #' @param Z - Non-treatment group covariates
 #' @param TRT - Treatment group indicator (0 = control, 1 = treatment)
 #'

@@ -1,7 +1,7 @@
 #' Group sequential test of adjusted SPs
 #'
 #' @description Performs a group sequential test of adjusted SPs between two treatment groups
-#' when provided the time point of analysis, the observed times, censoring indicator,
+#' when provided the time point of analysis, the observed times, event indicator,
 #' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 #'
 #'
@@ -9,7 +9,7 @@
 #'
 #' @param t0 -  Pre-specified time point of analysis
 #' @param Time - Observed times
-#' @param Status - Censoring indicator (0 = censored, 1 = observed)
+#' @param Status - Event indicator (0 = censored, 1 = observed)
 #' @param Z - Non-treatment group covariates
 #' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
 #' @param E - Enrollment times

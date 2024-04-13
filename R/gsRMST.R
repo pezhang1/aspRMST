@@ -6,7 +6,7 @@
 #' @inherit Imaxrmst references
 #'
 #' @description Performs a group sequential test of adjusted RMSTs between two treatment groups
-#' when provided the time point of analysis, the observed times, censoring indicator,
+#' when provided the time point of analysis, the observed times, event indicator,
 #' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 #'
 #' @inheritParams gsASP

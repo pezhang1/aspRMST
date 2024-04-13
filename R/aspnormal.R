@@ -1,7 +1,10 @@
 #' @title Calculates \eqn{I_{max}} for adjusted SPs for a normal covariate
 #'
 #'
-#' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation
+#' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
+#' This function simulates NN number of trials, calculates NN number of
+#' adjusted SP differences between the treatment and control group, and
+#' then takes the inverse of the variances of these differences to obtain \eqn{I_{max}}.
 #'
 #' @details Trial data are simulated using the following assumptions.
 #' Assume the event time for a subject follows a Weibull distribution with survival function
@@ -93,7 +96,17 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 
 #' @title Power calculation for a normal covariate
 #'
-#' @description Calculates the power given sample size and effect size via Monte Carlo simulation
+#' @description Calculates the power given sample size and effect size via Monte Carlo simulation.
+#' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
+#' the variance in the control group and treatment group, respectively,
+#' by calculating the maximum information for both groups.
+#' The power is then calculated using the equation
+#' \deqn{(\sqrt(N)*effect - z_{1-alpha/2}*\sqrt(V_0*N))/sqrt(V_{effect}*N)}
+#'
+#' \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
+#' This function simulates NN number of trials, calculates NN number of
+#' adjusted SP differences between the treatment and control group, and
+#' then takes the inverse of the variances of these differences to obtain \eqn{I_{max}}.
 #'
 #' @details See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
 #'
@@ -109,7 +122,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 #' @examples
 #' \dontrun{
 #'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#'  maxE=2, n = 191, effect=0.140996938, NN=10000, alpha=0.05)
+#'  maxE=2, n = 191, effect=0.14, NN=10000, alpha=0.05)
 #' }
 powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha) {
   Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
@@ -128,7 +141,12 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 #' @title Sample size calculation for a normal covariate
 #'
-#' @description Calculates the sample size given power and effect size via Monte Carlo simulation
+#' @description Calculates the sample size given power and effect size via Monte Carlo simulation.
+#' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
+#' the variance in the control group and treatment group, respectively,
+#' by calculating the maximum information for both groups using an intial sample size of m .
+#' The sample size N is then calculated using the equation
+#' \deqn{N = (z_{1-\alpha/2}*\sqrt(V_0*M) + z_{1-\beta}*\sqrt(V_{effect}*M))^2/effect^2}
 #'
 #' @inherit powerasp details
 #' @inherit Imaxasp references
@@ -144,7 +162,7 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' \dontrun{
 #'  set.seed(1234)
 #'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, m=400,
-#'   effect=0.140996938, NN=10000, alpha=0.05, beta = 0.2)
+#'   effect=0.14, NN=10000, alpha=0.05, beta = 0.2)
 #' }
 Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
   Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
@@ -165,6 +183,18 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 #' @title Effect size calculation for a normal covariate
 #'
 #' @description Calculates the effect size given sample size and power via Monte Carlo simulation
+#' This function first calculates an initial variance in the treatment group, \eqn{V_{10}},
+#'  by calculating the maximum information
+#' for an effect size of 0.
+#' Then the initial effect size is calculated as #'
+#' \deqn{effect = (zalpha * sqrt(V0*N) + zbeta * sqrt(V10*N)) / sqrt(N)}
+#' Using this effect size, \eqn{V_{11}} is calculated and
+#'  set as the updated variance of the treatment group.
+#'  \eqn{V_{10}} is set as \eqn{V_{11}} and this process is repeated
+#'  until convergence occurs.
+#'
+#'
+#'
 #'
 #' @inherit powerasp details
 #'

@@ -25,7 +25,7 @@
 #' \dontrun{
 #' set.seed(1234)
 #' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=200, effect=0.08788154, NN = 100)
+#' maxE=2, n=200, effect=0.088, NN = 100)
 #' }
 #'
 Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
@@ -98,7 +98,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' \dontrun{
 #' set.seed(1234)
 #' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=199, effect=0.08788154, NN=200, alpha=0.05)
+#' maxE=2, n=199, effect=0.088, NN=200, alpha=0.05)
 #' }
 #'
 #'
@@ -137,7 +137,7 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 #' \dontrun{
 #' set.seed(1234)
 #' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1,
-#' maxE=2, m = 400, beta2=0, effect = 0.08788154, NN = 100, alpha = 0.05, beta=0.2)
+#' maxE=2, m = 400, beta2=0, effect = 0.088, NN = 100, alpha = 0.05, beta=0.2)
 #' }
 Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
   Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
