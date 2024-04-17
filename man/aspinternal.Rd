@@ -7,11 +7,11 @@
 aspinternal(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- pre-specified time point of analysis}
+\item{t0}{- Pre-specified time point of analysis}
 
-\item{Time}{- Observed imes}
+\item{Time}{- Observed times}
 
-\item{Status}{- Censoring status (0 = censored, 1 = observed)}
+\item{Status}{- Event indicator (0 = censored, 1 = observed)}
 
 \item{Z}{- Non-treatment group covariates}
 
@@ -19,12 +19,12 @@ aspinternal(t0, Time, Status, Z, TRT)
 }
 \value{
 \itemize{
-  \item SPD - adjusted survival probability difference estimate
-  \item SED - standard error estimate of adjusted survival probability difference estimate
-  \item S0 - adjusted survival probability of treatment group 0
-  \item S1 - adjusted survival probability of treatment group 1
-  \item se10 - standard error of adjusted survival probability of treatment group 0
-  \item se11 - standard error of adjusted survival probability of treatment group 1
+  \item SPD - Adjusted SP difference estimate
+  \item SED - Standard error estimate of adjusted SP difference estimate
+  \item S0 - Adjusted SP of treatment group 0
+  \item S1 - Adjusted SP of treatment group 1
+  \item se10 - Standard error of adjusted SP of treatment group 0
+  \item se11 - Standard error of adjusted SP of treatment group 1
 }
 }
 \description{

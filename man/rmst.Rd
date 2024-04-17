@@ -2,16 +2,16 @@
 % Please edit documentation in R/rmst.R
 \name{rmst}
 \alias{rmst}
-\title{Restricted Mean Survival Time}
+\title{RMST}
 \usage{
 rmst(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- pre-specified time point, restricted mean survival time estimate is calculated over(0, t0)}
+\item{t0}{- Pre-specified time point, RMST estimate is calculated over(0, t0)}
 
 \item{Time}{- Observed times}
 
-\item{Status}{- Censoring indicator (0 = Censored, 1 = Observed)}
+\item{Status}{- Event indicator (0 = Censored, 1 = Observed)}
 
 \item{Z}{- Non-treatment group covariates}
 
@@ -19,32 +19,20 @@ rmst(t0, Time, Status, Z, TRT)
 }
 \value{
 \itemize{
-  \item muD - restricted mean survival time difference estimate
-  \item seD - standard error estimate of restricted mean survival time difference estimate
-  \item mu0 - restricted mean survival time of treatment group 0
-  \item mu1 - restricted mean survival time of treatment group 1
-  \item se10 - standard error of restricted mean survival time of treatment group 0
-  \item se11 - standard error of restricted mean survival time of treatment group 1
-}
-
-\itemize{
-  \item muD - adjusted survival probability difference estimate
-  \item SED - standard error estimate of adjusted survival probability difference estimate
-  \item mu0 - adjusted survival probability of treatment group 0
-  \item mu1 - adjusted survival probability of treatment group 1
-  \item SE0 - standard error of adjusted survival probability of treatment group 0
-  \item SE1 - standard error of adjusted survival probability of treatment group 1
+  \item muD - Adjusted SP difference estimate
+  \item SED - Standard error estimate of adjusted SP difference estimate
+  \item mu0 - Adjusted SP of treatment group 0
+  \item mu1 - Adjusted SP of treatment group 1
+  \item SE0 - Standard error of adjusted SP of treatment group 0
+  \item SE1 - Standard error of adjusted SP of treatment group 1
 }
 }
 \description{
-Calculates restricted mean survival time difference between two treatment groups
+Calculates RMST difference between two treatment groups
 at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
-Variance and standard error estimates for the difference are also calculated.
-Restricted mean survival time estimates and standard error / variance estimates
+Standard error estimates for the estimated differences are also calculated.
+RMST estimates and standard error estimates
 are also provided for each group.
-}
-\details{
-Calculates ...
 }
 \examples{
 set.seed(123)
@@ -72,11 +60,15 @@ rmst(t0,Time,Status,Z,TRT)$SED
 
 }
 \references{
-...
-}
-\seealso{
-survival
-}
-\author{
-Peter Zhang, Brent Logan, Michael Martens
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+
+Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
+Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+
+Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
+Based on a Stratified Cox Model. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+
+Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
+of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 }

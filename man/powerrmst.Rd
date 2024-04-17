@@ -2,45 +2,49 @@
 % Please edit documentation in R/rmstnormal.R
 \name{powerrmst}
 \alias{powerrmst}
-\title{Title}
+\title{Power calculation for a normal covariate}
 \usage{
 powerrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{-vector of coefficients for non-treatment group binary variables}
+\item{beta2}{- Coefficient of normal covariate}
 
-\item{crate}{- censoring rate, assumes an exponential distribution}
+\item{crate}{- Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- pre-specified time at which adjusted restricted mean survival times for each group are calculated
+\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated
 
  @inherit Imaxrmst references}
 
-\item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
+\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
 
-\item{n}{- sample size per group}
+\item{n}{- Sample size per group}
 
-\item{effect}{- targeted effect size}
+\item{effect}{- Targeted effect size}
 
-\item{NN}{- number of iterations}
+\item{NN}{- Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- targeted type I error rate}
+\item{alpha}{- Targeted type I error rate}
+}
+\value{
+Power for a trial with the given parameters.
 }
 \description{
-Title
+Power calculation for a normal covariate
 }
 \details{
-See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates power given effect size and sample size.
+See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
 }
 \examples{
 \dontrun{
 set.seed(1234)
-powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=199, effect=0.08788154, NN=200, alpha=0.05)
+powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+maxE=2, n=199, effect=0.088, NN=200, alpha=0.05)
 }
 
 

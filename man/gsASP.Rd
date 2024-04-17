@@ -2,16 +2,16 @@
 % Please edit documentation in R/gsASP.R
 \name{gsASP}
 \alias{gsASP}
-\title{gsASP}
+\title{Group sequential test of adjusted SPs}
 \usage{
 gsASP(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
 }
 \arguments{
-\item{t0}{-  pre-specified time point}
+\item{t0}{-  Pre-specified time point of analysis}
 
 \item{Time}{- Observed times}
 
-\item{Status}{- Censoring indicator (0 = Censored, 1 = Observed)}
+\item{Status}{- Event indicator (0 = censored, 1 = observed)}
 
 \item{Z}{- Non-treatment group covariates}
 
@@ -21,10 +21,22 @@ gsASP(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
 
 \item{alpha}{- Targeted type I error rate}
 
-\item{u}{- Calendar times of analysis}
+\item{u}{- Calendar times of analysis
+
+
+
+
+
+ @return
+ \itemize{
+  \item Z - Vector of test statistics
+  \item Crit - Vector of tritical values
+   }}
 }
 \description{
-gsASP
+Performs a group sequential test of adjusted SPs between two treatment groups
+when provided the time point of analysis, the observed times, event indicator,
+covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 }
 \examples{
 \dontrun{
@@ -63,17 +75,8 @@ Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Seq
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
-model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
 
 Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
 of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
-}
-\seealso{
-gsDesign
-
- @return
- \itemize{
-  \item Z - Test statistics
-  \item Crit - Critical values
-   }
 }

@@ -1,7 +1,7 @@
 
 
 #' @title Calculates \eqn{I_{max}} for adjusted SPs for binary covariates
-#'
+#' @inherit Imaxrmst return
 #' @inheritParams Imaxrmst
 #' @param beta2 - Vector of coefficients for binary covariates
 #' @param p - Vector of probabilities for binary covariates
@@ -67,8 +67,8 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 
 #' @title Power calculation for binary covariates
-#'
-#' @inherit powerasp details
+#' @inherit powerrmst return
+#' @inherit powerrmst details
 #'
 #' @inheritParams powerrmst
 #' @param beta2 - Vector of coefficients for binary covariates
@@ -99,8 +99,8 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, e
 
 
 #' @title Sample size calculation for binary covariates
-#'
-#' @inherit powerasp details
+#' @inherit Nrmst return
+#' @inherit Nrmst details
 #'
 #' @inheritParams Nrmst
 #' @param beta2 - Vector of coefficients for binary covariates
@@ -129,8 +129,8 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effec
 
 
 #' @title Effect size calculation for binary covariates
-#'
-#' @inherit powerasp details
+#' @inherit ESrmst return
+#' @inherit ESrmst details
 #'
 #' @inheritParams ESrmst
 #' @param beta2 - Vector of coefficients for binary covariates

@@ -2,28 +2,41 @@
 % Please edit documentation in R/binary.R
 \name{rootaspbinary}
 \alias{rootaspbinary}
-\title{Title}
+\title{Calculates \eqn{\beta_W} given a SP effect size}
 \usage{
 rootaspbinary(alpha0, alpha1, gamma0, beta2, t0, effect, p)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model}
+\item{alpha0}{- parameter to specify in Weibull model See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{- parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model}
+\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
 
 \item{beta2}{- vector of coefficients for non-treatment group binary variables}
 
-\item{t0}{- pre-specified time at which adjusted survival probabilities for each group are calculated}
+\item{t0}{- pre-specified time at which adjusted SPs for each group are calculated}
 
 \item{effect}{- targeted effect size}
 
-\item{p}{- vector of probabilities for non-treatment group binary variables}
+\item{p}{- Vector of probabilities for binary covariates}
 }
 \description{
-Title
+Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
+}
+\details{
+Trial data are simulated using the following assumptions.
+Assume the event time for a subject follows a Weibull distribution with survival function
+\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
+where the shape and rate parameters
+\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
+and \eqn{\mathbf{Z}} (vector of baseline covariates):
+ \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
+\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
+simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
 }
 \examples{
-rootaspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0 = 1, effect=0.1334313, p =c(0.2,0.5))
+rootaspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0 = 1,
+effect=0.1334313, p =c(0.2,0.5))
 }

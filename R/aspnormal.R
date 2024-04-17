@@ -2,9 +2,11 @@
 #'
 #'
 #' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
-#' This function simulates NN number of trials, calculates NN number of
-#' adjusted SP differences between the treatment and control group, and
-#' then takes the inverse of the variances of these differences to obtain \eqn{I_{max}}.
+#' This function simulates NN number of trials, calculates the
+#' adjusted SP difference between the treatment and control group for each of the NN trials,
+#'  and then takes the inverse of the variance of these differences to obtain \eqn{I_{max}}.
+#'
+#' @return Maximum information for a trial with the given parameters.
 #'
 #' @details Trial data are simulated using the following assumptions.
 #' Assume the event time for a subject follows a Weibull distribution with survival function
@@ -96,6 +98,8 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 
 #' @title Power calculation for a normal covariate
 #'
+#' @return Power for a trial with the given parameters.
+#'
 #' @description Calculates the power given sample size and effect size via Monte Carlo simulation.
 #' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
 #' the variance in the control group and treatment group, respectively,
@@ -141,6 +145,8 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 #' @title Sample size calculation for a normal covariate
 #'
+#' @return Sample size for a trial with the given parameters
+#'
 #' @description Calculates the sample size given power and effect size via Monte Carlo simulation.
 #' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
 #' the variance in the control group and treatment group, respectively,
@@ -182,6 +188,7 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 
 #' @title Effect size calculation for a normal covariate
 #'
+#' @return Effect size for a trial given the parameters
 #' @description Calculates the effect size given sample size and power via Monte Carlo simulation
 #' This function first calculates an initial variance in the treatment group, \eqn{V_{10}},
 #'  by calculating the maximum information

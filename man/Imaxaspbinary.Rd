@@ -2,35 +2,41 @@
 % Please edit documentation in R/aspbinary.R
 \name{Imaxaspbinary}
 \alias{Imaxaspbinary}
-\title{Maximum information for adjusted survival probabilities for binary covariates}
+\title{Calculates \eqn{I_{max}} for adjusted SPs for binary covariates}
 \usage{
 Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, p)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{-vector of coefficients for non-treatment group binary variables}
+\item{beta2}{- Vector of coefficients for binary covariates}
 
-\item{crate}{- censoring rate, assumes an exponential distribution}
+\item{crate}{- Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- pre-specified time at which adjusted survival probabilities for each group are calculated}
+\item{t0}{- Pre-specified time at which adjusted SPs for each group are calculated}
 
-\item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
+\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
 
-\item{n}{- sample size per group}
+\item{n}{- Sample size per group}
 
-\item{effect}{- targeted effect size}
+\item{effect}{- Targeted effect size}
 
-\item{NN}{- number of iterations}
+\item{NN}{- Number of iterations used to calculate the maximum information}
 
-\item{p}{- vector of probabilities for non-treatment group binary variables}
+\item{p}{- Vector of probabilities for binary covariates}
+}
+\value{
+Maximum information for a trial with the given parameters.
 }
 \description{
-Maximum information for adjusted survival probabilities for binary covariates
+Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
+This function simulates NN number of trials, calculates the
+adjusted SP difference between the treatment and control group for each of the NN trials,
+ and then takes the inverse of the variance of these differences to obtain \eqn{I_{max}}.
 }
 \details{
 Trial data are simulated using the following assumptions.
@@ -46,7 +52,8 @@ simulate trial data under a proportional hazards model, delayed effect setting, 
 }
 \examples{
 \dontrun{
-Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
+Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
 }
 }
 \references{
@@ -54,7 +61,7 @@ Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Seq
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
-model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
 
 Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
 of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709

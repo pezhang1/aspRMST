@@ -1,7 +1,7 @@
 #' @title Calculates \eqn{I_{max}} for adjusted SPs for binary covariates
 #'
 #' @inherit Imaxasp description
-#'
+#' @inherit Imaxasp return
 #' @inherit Imaxasp details
 #'
 #' @inherit Imaxasp references
@@ -68,7 +68,7 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
 
 
 #' @title Power calculation for binary covariates
-#'
+#' @inherit powerasp return
 #' @inherit powerasp description
 #' @inherit powerasp details
 #'
@@ -103,6 +103,7 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 
 
 #' @title Sample size calculation for binary covariates
+#' @inherit Nasp return
 #' @inherit Nasp description
 #' @inherit Nasp details
 #'
@@ -149,7 +150,7 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect
 
 
 #' @title Effect size calculation for binary covariates
-#'
+#' @inherit ESasp return
 #' @inherit Esasp description
 #' @inheritParams ESasp
 #'

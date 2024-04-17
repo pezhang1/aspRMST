@@ -44,8 +44,20 @@ ESasp(
 
 \item{max.iter}{- Maximum number of iterations to calculate the effect size}
 }
+\value{
+Effect size for a trial given the parameters
+}
 \description{
 Calculates the effect size given sample size and power via Monte Carlo simulation
+This function first calculates an initial variance in the treatment group, \eqn{V_{10}},
+ by calculating the maximum information
+for an effect size of 0.
+Then the initial effect size is calculated as #'
+\deqn{effect = (zalpha * sqrt(V0*N) + zbeta * sqrt(V10*N)) / sqrt(N)}
+Using this effect size, \eqn{V_{11}} is calculated and
+ set as the updated variance of the treatment group.
+ \eqn{V_{10}} is set as \eqn{V_{11}} and this process is repeated
+ until convergence occurs.
 
 Calculate effect size given power and sample size
 }

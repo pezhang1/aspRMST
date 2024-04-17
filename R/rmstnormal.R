@@ -1,7 +1,7 @@
 
 #' @title Calculates \eqn{I_{max}} for adjusted RMSTs for a normal covariate
+#' @inherit Imaxasp return
 #'
-#' @inherit Imaxasp
 #'
 #' @inheritParams Imaxasp
 #' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
@@ -84,7 +84,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' @title Power calculation for a normal covariate
 #'
 #' @inherit powerasp details
-#'
+#' @inherit powerasp return
 #' @inheritParams powerasp
 #'
 #'
@@ -124,7 +124,7 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 #' @title Sample size calculation for a normal covariate
 #'
 #' @inherit powerasp details
-#'
+#' @inherit powerasp return
 #' @inheritParams Nasp
 #' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
 #'
@@ -157,8 +157,8 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 
 #' @title Effect size calculation for a normal covariate
 #'
-#' @inherit powerasp details
-#'
+#' @inherit ESasp details
+#' @inherit ESasp return
 #' @inheritParams ESasp
 #' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmstbinary.R
 \name{Nrmstbinary}
 \alias{Nrmstbinary}
-\title{Title}
+\title{Sample size calculation for binary covariates}
 \usage{
 Nrmstbinary(
   alpha0,
@@ -21,40 +21,47 @@ Nrmstbinary(
 )
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{-vector of coefficients for non-treatment group binary variables}
+\item{beta2}{- Vector of coefficients for binary covariates}
 
-\item{crate}{- censoring rate, assumes an exponential distribution}
+\item{crate}{- Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- pre-specified time at which adjusted restricted mean survival times for each group are calculated}
+\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated}
 
-\item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
+\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
 
-\item{m}{- sample size used to calculate the maximum information, Imax}
+\item{m}{- Sample size used to calculate the maximum information, Imax}
 
-\item{effect}{- targeted effect size}
+\item{effect}{- Targeted effect size}
 
-\item{NN}{- number of iterations}
+\item{NN}{- Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- targeted type I error rate}
+\item{alpha}{- Targeted type I error rate}
 
-\item{beta}{- targeted type II error rate}
+\item{beta}{- Targeted type II error rate}
 
-\item{p}{- vector of probabilities for non-treatment group binary variables}
+\item{p}{- Vector of probabilities for binary covariates}
+}
+\value{
+Power for a trial with the given parameters.
 }
 \description{
-Title
+Sample size calculation for binary covariates
 }
 \details{
-See Details section in \code{\link{Imaxasp}} on how trial data are simulated. Calculates power given effect size and sample size.
+See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
 }
 \examples{
-\dontrun{}
+\dontrun{
+set.seed(1234)
+Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+maxE=2, m=400, effect=0.088, NN=100, alpha=0.05, beta=0.2, p=c(0.5,0.3))
+}
 }
 \references{
 Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
@@ -64,7 +71,7 @@ Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regressi
 Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
 
 Zhang, X. (2013). Comparison of Restricted Mean Survival Times Between Treatments
-Based on a stratified cox Nodel. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
+Based on a Stratified Cox Model. \emph{Bio-Algorithms and Med-Systems} \strong{9(4)}, 183-189
 
 Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
 of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709

@@ -2,7 +2,7 @@
 % Please edit documentation in R/aspbinary.R
 \name{Naspbinary}
 \alias{Naspbinary}
-\title{Title}
+\title{Sample size calculation for binary covariates}
 \usage{
 Naspbinary(
   alpha0,
@@ -21,51 +21,51 @@ Naspbinary(
 )
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{-vector of coefficients for non-treatment group binary variables}
+\item{beta2}{- Vector of coefficients for binary covariates}
 
-\item{crate}{- censoring rate, assumes an exponential distribution}
+\item{crate}{- Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- pre-specified time at which adjusted survival probabilities for each group are calculated}
+\item{t0}{- Pre-specified time at which adjusted SPs for each group are calculated}
 
-\item{maxE}{- maximum enrollment time. Assumes uniform enrollment between [0,E]}
+\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
 
-\item{m}{- sample size used to calculate the maximum information, Imax}
+\item{m}{- Sample size used to calculate the maximum information, Imax}
 
-\item{effect}{- targeted effect size}
+\item{effect}{- Targeted effect size}
 
-\item{NN}{- number of iterations}
+\item{NN}{- Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- targeted type I error rate}
+\item{alpha}{- Targeted type I error rate}
 
-\item{beta}{- targeted type II error rate}
+\item{beta}{- Targeted type II error rate}
 
-\item{p}{- vector of probabilities for non-treatment group binary variables}
+\item{p}{- Vector of probabilities for binary covariates}
+}
+\value{
+Sample size for a trial with the given parameters
 }
 \description{
-Title
+Calculates the sample size given power and effect size via Monte Carlo simulation.
+This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
+the variance in the control group and treatment group, respectively,
+by calculating the maximum information for both groups using an intial sample size of m .
+The sample size N is then calculated using the equation
+\deqn{N = (z_{1-\alpha/2}*\sqrt(V_0*M) + z_{1-\beta}*\sqrt(V_{effect}*M))^2/effect^2}
 }
 \details{
-Trial data are simulated using the following assumptions.
-Assume the event time for a subject follows a Weibull distribution with survival function
-\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
-where the shape and rate parameters
-\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
-and \eqn{\mathbf{Z}} (vector of baseline covariates):
- \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
-\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
-\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
-simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
+See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
 }
 \examples{
 \dontrun{
 set.seed(1234)
-Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, m=400, effect=0.1334313, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3))
+Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+ maxE=2, m=400, effect=0.13, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3))
 }
 
 }
@@ -74,7 +74,7 @@ Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Seq
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
-model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
+Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
 
 Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
 of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709

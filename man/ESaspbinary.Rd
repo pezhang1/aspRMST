@@ -47,6 +47,9 @@ ESaspbinary(
 
 \item{p}{- Vector of probabilities for binary covariates}
 }
+\value{
+Effect size for a trial given the parameters
+}
 \description{
 Effect size calculation for binary covariates
 }
