@@ -66,8 +66,8 @@
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' rmst(t0,Time,Status,Z,TRT)$muD
-#' rmst(t0,Time,Status,Z,TRT)$SED
+#' rmst(t0,Time,Status,Z,TRT)$muD #0.01355406
+#' rmst(t0,Time,Status,Z,TRT)$SED # 0.04315677
 #'
 rmst = function(t0,Time,Status,Z,TRT){
   # Calculate RMST difference and its standard error

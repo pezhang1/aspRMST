@@ -15,8 +15,9 @@
 #'
 #' @examples
 #' \dontrun{
+#' set.seed(1234)
 #' Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
+#' maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3)) #423.1060
 #' }
 Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p) {
   asp.diff.est = NULL
@@ -83,8 +84,9 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, eff
 #'
 #' @examples
 #' \dontrun{
+#' set.seed(1234)
 #' poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=212, effect=0.13, NN=10000, alpha = 0.05, p =c(0.5, 0.3))
+#' maxE=2, n=223, effect=0.13, NN=10000, alpha = 0.05, p =c(0.5, 0.3)) #0.7964
 #' }
 poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha=0.05,p) {
   Veffect = 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN,p)
@@ -121,7 +123,7 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, ef
 #' \dontrun{
 #' set.seed(1234)
 #' Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#'  maxE=2, m=400, effect=0.13, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3))
+#'  maxE=2, m=400, effect=0.13, NN=10000, alpha=0.05, beta = 0.2, p =c(0.5, 0.3)) #222.6704
 
 #' }
 #'
@@ -150,8 +152,10 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect
 
 
 #' @title Effect size calculation for binary covariates
+#'
 #' @inherit ESasp return
 #' @inherit Esasp description
+#'
 #' @inheritParams ESasp
 #'
 #' @inherit ESasp details
@@ -165,8 +169,9 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect
 #'
 #' @examples
 #' \dontrun{
+#' set.seed(1234)
 #' ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta2=0, crate=0, t0=1,
-#'  maxE=2, n=212, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10)
+#'  maxE=2, n=223, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10, p =c(0.5,0.3)) #0.129456
 #' }
 ESaspbinary <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter, p){
   zalpha = qnorm(1-alpha/2)

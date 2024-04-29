@@ -11,7 +11,7 @@
 #'
 #' @inheritParams gsASP
 #'
-#' @return
+#' @returns
 #'  \itemize{
 #'   \item Z - Vector of test statistics
 #'   \item Crit - Vector of critical values
@@ -46,9 +46,10 @@
 #' {CT = rexp(2*n, rate=crate)}
 #' Data = cbind(E,FT,CT,Z1,Z2)
 #' delta = as.numeric(FT < CT)
-#' test <- gsRMST(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
-#' test$Z
-#' test$Crit
+#' X = pmin(FT,CT)
+#' test <- gsRMST(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
+#' test$Z #1.051475 1.990320 2.232713
+#' test$Crit # 2.818662 2.383526 2.022924
 #' }
 #'
 #'

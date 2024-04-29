@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' set.seed(1234)
 #'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
 #'  maxE=200, n=200, effect=0.088, NN=100,p=c(0.5,0.3) )
 #' }

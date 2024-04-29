@@ -3,7 +3,7 @@
 #'
 #' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given RMST effect size
 #'
-#' @inherit Imaxasp details
+#'
 #'
 #' @param alpha0 - parameter to specify in Weibull model. See Details for more information.
 #' @param alpha1 - parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
@@ -44,7 +44,7 @@ rootrmst = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
 #'
 #' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
 #'
-#' @inherit Imaxasp details
+#'
 #'
 #' @param alpha0 - parameter to specify in Weibull model See Details for more information.
 #' @param alpha1 - parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
@@ -58,7 +58,7 @@ rootrmst = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
 #'
 #' @examples
 #' rootasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0=1,
-#' effect=0.140996938)
+#' effect=0.14)
 rootasp = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
 
   G = function(beta1)

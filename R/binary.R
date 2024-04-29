@@ -3,7 +3,7 @@
 #'
 #' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given RMST effect size
 #'
-#' @inherit Imaxasp details
+#'
 #'
 #' @inheritParams  rootrmst
 #' @param p - Vector of probabilities for binary covariates
@@ -70,7 +70,7 @@ rootrmstbinary = function(alpha0, alpha1, gamma0, beta2, t0, effect,p ) {
 #'
 #' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
 #'
-#' @inherit Imaxasp details
+#'
 #'
 #' @inheritParams  rootasp
 #'

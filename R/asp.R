@@ -39,16 +39,28 @@
 #' @examples
 #' set.seed(1234)
 #' t0 = 1
-#' TRT = c(rep(0,5),rep(1,5))
-#' Z = cbind(rnorm(10))
-#' FT = c(0.30,  0.58,  0.41,  0.0333,  0.58,  0.10,  0.83,  2.45,  8.7, 17.1)
-#' CT = c(0.20, 0.8, 0.73, 0.24, 0.5, 0.25, 1.3, 3.6, 10, 20.5)
+#' set.seed(123)
+#' t0 = 1
+#' n0 = 100
+#' n1 = 100
+#' n = n0 + n1
+#' alpha0 = 1.5
+#' alpha1 = -1
+#' gamma0 = -log(0.4)
+#' beta1 = -0.5
+#' beta2 = log(1.5)
+#' crate = -log(0.95)
+#' TRT = c(rep(0,n0),rep(1,n1))                        # treatment indicator
+#' Z = cbind(rnorm(n))                               # covariates
+#' alpha = alpha0+alpha1*TRT
+#' gamma1 = gamma0*exp(beta1*TRT+beta2*Z)
+#' FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
+#' CT = rexp(n, rate=crate)
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' output = asp(t0,Time,Status,Z,TRT)
-#' output$SPD
-#' output$SED
+#' asp(t0,Time,Status,Z,TRT)$SPD #0.09488613
+#' asp(t0,Time,Status,Z,TRT)$SED #0.06942817
 asp = function(t0,Time,Status,Z,TRT) {
   n= length(TRT)
   n1 = sum(TRT)

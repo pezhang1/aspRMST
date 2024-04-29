@@ -20,7 +20,7 @@
 #'
 #'
 #'
-#'  @return
+#'  @returns
 #'  \itemize{
 #'   \item Z - Vector of test statistics
 #'   \item Crit - Vector of tritical values
@@ -53,9 +53,10 @@
 #' {CT = rexp(2*n, rate=crate)}
 #' Data = cbind(E,FT,CT,Z1,Z2)
 #' delta = as.numeric(FT < CT)
-#' test <- gsASP(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
-#' test$Crit
-#' test$Z
+#' X = pmin(FT,CT)
+#' test <- gsASP(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
+#' test$Crit #2.802284 2.283383 2.037149
+#' test$Z #2.545480 2.792856 2.628482
 #' }
 #'
 gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
