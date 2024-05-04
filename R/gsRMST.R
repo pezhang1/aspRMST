@@ -1,11 +1,11 @@
 
 
 
-#' Group sequential test of adjusted RMSTs
+#' Group sequential test of adjusted restricted mean survival times
 #'
 #' @inherit Imaxrmst references
 #'
-#' @description Performs a group sequential test of adjusted RMSTs between two treatment groups
+#' @description Performs a group sequential test of adjusted restricted mean survival times (RMST)s between two treatment groups
 #' when provided the time point of analysis, the observed times, event indicator,
 #' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 #'
@@ -13,9 +13,9 @@
 #'
 #' @returns
 #'  \itemize{
-#'   \item Z - Vector of test statistics
-#'   \item Crit - Vector of critical values
-#'    }
+#'   \item Z Vector of test statistics
+#'   \item Crit Vector of critical values
+#' }
 #' @export
 #'
 #'

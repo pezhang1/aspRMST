@@ -1,9 +1,9 @@
-#' @title Calculates \eqn{I_{max}} for adjusted SPs for a normal covariate
+#' @title Calculates \eqn{I_{max}} for adjusted survival probability difference for a normal covariate
 #'
 #'
 #' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
 #' This function simulates NN number of trials, calculates the
-#' adjusted SP difference between the treatment and control group for each of the NN trials,
+#' adjusted survival probability (SP) difference between the treatment and control group for each of the NN trials,
 #'  and then takes the inverse of the variance of these differences to obtain \eqn{I_{max}}.
 #'
 #' @return Maximum information for a trial with the given parameters.
@@ -19,19 +19,19 @@
 #' \eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
 #' simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
 #'
-#' @param alpha0 - Parameter to specify in Weibull model. See Details for more information.
-#' @param alpha1 - Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated
-#' @param gamma0 - Parameter to specify in Weibull model. See Details for more information.
-#' @param beta2 - Coefficient of normal covariate
-#' @param crate - Censoring rate, assumes an exponential distribution
-#' @param t0 - Pre-specified time at which adjusted SPs for each group are calculated
-#' @param maxE - Maximum enrollment time. Assumes uniform enrollment between [0, E]
-#' @param n - Sample size per group
-#' @param effect - Targeted effect size
-#' @param NN - Number of iterations used to calculate the maximum information
+#' @param alpha0 Parameter to specify in Weibull model. See Details for more information.
+#' @param alpha1 Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated
+#' @param gamma0 Parameter to specify in Weibull model. See Details for more information.
+#' @param beta Coefficient of normal covariate
+#' @param crate Censoring rate, assumes an exponential distribution
+#' @param t0 Pre-specified time at which adjusted SPs for each group are calculated
+#' @param maxE Maximum enrollment time. Assumes uniform enrollment between [0, maxE]
+#' @param n Sample size per group
+#' @param effect Targeted effect size
+#' @param NN Number of iterations used to calculate the maximum information
 #'
 #'
-#' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+#' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
 #' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 #' Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression
 #' Model. \emph{Comput Methods Programs Biomed} \strong{88(2)}, 95–101.
@@ -45,14 +45,14 @@
 #' \dontrun{
 #' set.seed(1234)
 #' #424.7966
-#' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
 #' maxE=2, n=200, effect=0, NN=10000)
 #' }
-Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
+Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN) {
   asp.diff.est = NULL
   asp.diff.se = NULL
   minE = 0
-  beta1 = rootasp(alpha0, alpha1, gamma0, beta2, t0, effect)
+  beta1 = rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
   umax = t0 + maxE
   for (i in 1:NN)
   {
@@ -61,7 +61,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
     Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
     Z2 = as.matrix(rnorm(2*n))                             # covariates
     alpha = alpha0+alpha1*Z1
-    gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+    gamma1 = gamma0*exp(beta1*Z1+beta*Z2)
     FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
     CT = NULL
     if (crate == 0)
@@ -98,7 +98,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 
 
 
-#' @title Power calculation for a normal covariate
+#' @title Power calculation for testing survival probability difference adjusted for a normal covariate
 #'
 #' @return Power for a trial with the given parameters.
 #'
@@ -116,7 +116,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 #' @inherit Imaxasp references
 #'
 #' @inheritParams Imaxasp
-#' @param alpha - Targeted type I error rate
+#' @param alpha Targeted type I error rate
 #'
 #'
 #' @export
@@ -125,12 +125,12 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, N
 #' \dontrun{
 #' set.seed(1234)
 #'  #0.8012848
-#'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
 #'  maxE=2, n = 192, effect=0.14, NN=10000, alpha=0.05)
 #' }
-powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha) {
-  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
-  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN)
+powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha) {
+  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
+  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
   N = n
   zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
   if (effect ==0)
@@ -143,7 +143,7 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 
 
-#' @title Sample size calculation for a normal covariate
+#' @title Sample size calculation for testing survival probability difference adjusted for a normal covariate
 #'
 #' @return Sample size for a trial with the given parameters
 #'
@@ -158,8 +158,8 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' @inherit Imaxasp references
 #'
 #' @inheritParams powerasp
-#' @param m - Sample size used to calculate the maximum information, Imax
-#' @param beta - Targeted type II error rate
+#' @param m Sample size used to calculate the maximum information, Imax
+#' @param pi Targeted power
 #'
 #'
 #' @export
@@ -167,14 +167,14 @@ powerasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' @examples
 #' \dontrun{
 #'  set.seed(1234)
-#'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1, maxE=2, m=400,
-#'   effect=0.14, NN=10000, alpha=0.05, beta = 0.2) #191.1381
+#'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1, maxE=2, m=400,
+#'   effect=0.14, NN=10000, alpha=0.05, pi = 0.8) #191.1381
 #' }
-Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
-  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
-  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN)
+Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi=0.8) {
+  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN)
+  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect = 0, NN)
   M = m
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(1-beta)*sqrt(Veffect*M))^2/effect^2
+  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
 
   return(N)
 }
@@ -186,7 +186,7 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 
 
 
-#' @title Effect size calculation for a normal covariate
+#' @title Effect size calculation for testing survival probability difference adjusted for a normal covariate
 #'
 #' @return Effect size for a trial given the parameters
 #' @description Calculates the effect size given sample size and power via Monte Carlo simulation.
@@ -194,7 +194,7 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 #'  by calculating the maximum information
 #' for an effect size of 0.
 #' Then the initial effect size is calculated as
-#' \deqn{effect = (z_{\alpha/2} * \sqrt(V_0*N) + z_{\beta} * \sqrt(V_{10}*N)) / sqrt(N)}
+#' \deqn{effect = (z_{1-\alpha/2} * \sqrt(V_0*N) + z_{\pi} * \sqrt(V_{10}*N)) / sqrt(N)}
 #' Using this effect size, \eqn{V_{11}} is calculated and
 #'  set as the updated variance of the treatment group.
 #'  \eqn{V_{10}} is set as \eqn{V_{11}} and this process is repeated
@@ -212,9 +212,9 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 #'
 #' @inheritParams Imaxasp
 #'
-#' @param alpha - Targeted type I error rate
-#' @param beta - Targeted type II error rate
-#' @param max.iter - Maximum number of iterations to calculate the effect size
+#' @param alpha Targeted type I error rate
+#' @param pi Targeted power
+#' @param max.iter Maximum number of iterations to calculate the effect size
 #'
 #'
 #' @export
@@ -222,17 +222,17 @@ Nasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, 
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
-#' ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=192, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10) #0.1397
+#' ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' maxE=2, n=192, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1397
 #' }
-ESasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0,
-                  maxE, n, NN, alpha=0.05, beta = 0.2, max.iter){
+ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
+                  maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
   zalpha = qnorm(1-alpha/2)
-  zbeta = qnorm(1-beta)
+  zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
   N = n
-  Imax = Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN)
+  Imax = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
@@ -241,7 +241,7 @@ ESasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0,
   {
     effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(N)      # calculate delta
 
-    Imax1 = Imaxasp(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
+    Imax1 = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff
@@ -250,10 +250,10 @@ ESasp <- function(alpha0, alpha1, gamma0, beta2, crate, t0,
       if (V11 > V10)
       {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
-        beta1 = rootasp(alpha0, alpha1, gamma0, beta2, t0, effect)
+        beta1 = rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
       }    else {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
-        beta1 =  rootasp(alpha0, alpha1, gamma0, beta2, t0, effect)
+        beta1 =  rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
       }
       break
     }

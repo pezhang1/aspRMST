@@ -1,4 +1,4 @@
-#' RMST
+#' Calculate adjusted restricted mean survival times
 #'
 #'
 #' @description Calculates RMST difference between two treatment groups
@@ -24,20 +24,20 @@
 #'
 #'
 #'
-#' @param t0 - Pre-specified time point, RMST estimate is calculated over(0, t0)
-#' @param Time - Observed times
-#' @param Status - Event indicator (0 = Censored, 1 = Observed)
-#' @param Z - Non-treatment group covariates
-#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
+#' @param t0 Pre-specified time point, RMST estimate is calculated over(0, t0)
+#' @param Time Observed times
+#' @param Status Event indicator (0 = Censored, 1 = Observed)
+#' @param Z Non-treatment group covariates
+#' @param TRT Treatment group indicator (0 = Control, 1 = Treatment)
 #'
 #' @returns
 #'  \itemize{
-#'   \item muD - Adjusted SP difference estimate
-#'   \item SED - Standard error estimate of adjusted SP difference estimate
-#'   \item mu0 - Adjusted SP of treatment group 0
-#'   \item mu1 - Adjusted SP of treatment group 1
-#'   \item SE0 - Standard error of adjusted SP of treatment group 0
-#'   \item SE1 - Standard error of adjusted SP of treatment group 1
+#'   \item muD Adjusted SP difference estimate
+#'   \item SED Standard error estimate of adjusted SP difference estimate
+#'   \item mu0 Adjusted SP of treatment group 0
+#'   \item mu1 Adjusted SP of treatment group 1
+#'   \item SE0 Standard error of adjusted SP of treatment group 0
+#'   \item SE1 Standard error of adjusted SP of treatment group 1
 #' }
 #'
 #'
@@ -46,10 +46,10 @@
 #'
 #'
 #' @examples
-#' set.seed(123)
+#' set.seed(1234)
 #' t0 = 1
-#' n0 = 100
-#' n1 = 100
+#' n0 = 400
+#' n1 = 400
 #' n = n0 + n1
 #' alpha0 = 1.5
 #' alpha1 = -0.3

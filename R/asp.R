@@ -1,7 +1,7 @@
-#' Adjusted SP
+#' Calculate adjusted survival probabilities
 #'
 #' @inherit Imaxasp references
-#' @description Calculates the adjusted SP difference between two treatment groups
+#' @description Calculates the adjusted survival probability (SP) difference between two treatment groups
 #' at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
 #' Standard error estimates for the estimated difference are also calculated.
 #' Adjusted SP estimates and standard error estimates
@@ -19,30 +19,30 @@
 #'
 #'
 #'
-#' @param t0 - Pre-specified time point of analysis
-#' @param Time - Observed times
-#' @param Status - Event indicator (0 = censored, 1 = observed)
-#' @param Z - Non-treatment group covariates
-#' @param TRT - Treatment group indicator (0 = control, 1 = treatment)
+#' @param t0 Pre-specified time point of analysis
+#' @param Time Observed times
+#' @param Status Event indicator (0 = censored, 1 = observed)
+#' @param Z Non-treatment group covariates
+#' @param TRT Treatment group indicator (0 = control, 1 = treatment)
 #'
 #' @returns
 #'  \itemize{
-#'   \item SPD - Adjusted SP difference estimate
-#'   \item SED - Standard error estimate of adjusted SP difference estimate
-#'   \item S0 - Adjusted SP estimate for treatment group 0
-#'   \item S1 - Adjusted SP estimate for treatment group 1
-#'   \item SE0 - Standard error estimate of adjusted SP estimate for treatment group 0
-#'   \item SE1 - Standard error estimate of adjusted SP estimate for treatment group 1
+#'   \item SPD Adjusted SP difference estimate
+#'   \item SED Standard error estimate of adjusted SP difference estimate
+#'   \item S0 Adjusted SP estimate for treatment group 0
+#'   \item S1 Adjusted SP estimate for treatment group 1
+#'   \item SE0 Standard error estimate of adjusted SP estimate for treatment group 0
+#'   \item SE1 Standard error estimate of adjusted SP estimate for treatment group 1
 #' }
 #' @export
 #'
 #' @examples
+#'
+#' t0 = 1
 #' set.seed(1234)
 #' t0 = 1
-#' set.seed(123)
-#' t0 = 1
-#' n0 = 100
-#' n1 = 100
+#' n0 = 400
+#' n1 = 400
 #' n = n0 + n1
 #' alpha0 = 1.5
 #' alpha1 = -1
@@ -174,14 +174,13 @@ asp = function(t0,Time,Status,Z,TRT) {
 #' @inheritParams asp
 #'
 #' @returns
-#'  \itemize{
-#'   \item SPD - Adjusted SP difference estimate
-#'   \item SED - Standard error estimate of adjusted SP difference estimate
-#'   \item S0 - Adjusted SP of treatment group 0
-#'   \item S1 - Adjusted SP of treatment group 1
-#'   \item se10 - Standard error of adjusted SP of treatment group 0
-#'   \item se11 - Standard error of adjusted SP of treatment group 1
-#' }
+#'   SPD Adjusted SP difference estimate
+#'   SED Standard error estimate of adjusted SP difference estimate
+#'   S0 Adjusted SP of treatment group 0
+#'    S1 Adjusted SP of treatment group 1
+#'   se10 Standard error of adjusted SP of treatment group 0
+#'   se11 Standard error of adjusted SP of treatment group 1
+#'
 #' @export
 #'
 #' @keywords internal

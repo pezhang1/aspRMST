@@ -1,30 +1,30 @@
-#' Group sequential test of adjusted SPs
+#' Group sequential test of adjusted survival probabilities
 #'
-#' @description Performs a group sequential test of adjusted SPs between two treatment groups
+#' @description Performs a group sequential test of adjusted survival probabilities (SPs) between two treatment groups
 #' when provided the time point of analysis, the observed times, event indicator,
 #' covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 #'
 #'
 #' @inherit Imaxasp references
 #'
-#' @param t0 -  Pre-specified time point of analysis
-#' @param Time - Observed times
-#' @param Status - Event indicator (0 = censored, 1 = observed)
-#' @param Z - Non-treatment group covariates
-#' @param TRT - Treatment group indicator (0 = Control, 1 = Treatment)
-#' @param E - Enrollment times
-#' @param alpha - Targeted type I error rate
-#' @param u - Calendar times of analysis
+#' @param t0 Pre-specified time point of analysis
+#' @param Time Observed times
+#' @param Status Event indicator (0 = censored, 1 = observed)
+#' @param Z Non-treatment group covariates
+#' @param TRT Treatment group indicator (0 = Control, 1 = Treatment)
+#' @param E Enrollment times
+#' @param alpha Targeted type I error rate
+#' @param u Calendar times of analysis
 #'
 #'
 #'
 #'
 #'
-#'  @returns
+#' @returns
 #'  \itemize{
-#'   \item Z - Vector of test statistics
-#'   \item Crit - Vector of tritical values
-#'    }
+#'   \item Z Vector of test statistics
+#'   \item Crit Vector of critical values
+#' }
 #' @export
 #'
 #' @examples

@@ -1,24 +1,25 @@
-#' @title Calculates \eqn{\beta_W} given a RMST effect size
+#' @title Calculates \eqn{\beta_W} given a restricted mean survival time effect size
 #'
 #'
-#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given RMST effect size
+#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given restricted mean survival time effect size
 #'
 #'
 #'
-#' @param alpha0 - parameter to specify in Weibull model. See Details for more information.
-#' @param alpha1 - parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model. See Details for more information.
-#' @param beta2 - vector of coefficients for non-treatment group binary variables
-#' @param t0 - pre-specified time at which adjusted restricted mean survival times for each group are calculated
-#' @param effect - targeted effect size
+#' @param alpha0 Parameter to specify in Weibull model. See Details for more information.
+#' @param alpha1 Parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
+#' @param gamma0 Parameter to specify in Weibull model. See Details for more information.
+#' @param beta vector of coefficients for non-treatment group binary variables
+#' @param t0 Pre-specified time at which adjusted restricted mean survival times for each group are calculated
+#' @param effect Targeted effect size
 #'
+#' @return \eqn{\beta_W}, the coefficient for the treatment group variable
 #'
 #' @export
 #'
 #' @examples
-#' rootrmst(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta2 =0, t0=1,
+#' rootrmst(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta =0, t0=1,
 #' effect=0.1)
-rootrmst = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
+rootrmst = function(alpha0, alpha1, gamma0, beta, t0, effect) {
 
   Diff=function(beta1)
   {
@@ -26,8 +27,8 @@ rootrmst = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
     {
       Alpha0 = alpha0
       Alpha1 = alpha0+alpha1
-      Lambda0 = gamma0*exp(beta2*z)
-      Lambda1 = gamma0*exp(beta1+beta2*z)
+      Lambda0 = gamma0*exp(beta*z)
+      Lambda1 = gamma0*exp(beta1+beta*z)
       f0 = gamma(1+1/Alpha0) * pgamma(t0**Alpha0,shape=1/Alpha0,rate=Lambda0) / Lambda0**(1/Alpha0)
       f1 = gamma(1+1/Alpha1) * pgamma(t0**Alpha1,shape=1/Alpha1,rate=Lambda1) / Lambda1**(1/Alpha1)
       temp = (f1-f0)*dnorm(z,0,1)
@@ -40,37 +41,37 @@ rootrmst = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
 }
 
 
-#' @title Calculates \eqn{\beta_W} given a SP effect size
+#' @title Calculates \eqn{\beta_W} given a survival probability effect size
 #'
-#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
-#'
-#'
-#'
-#' @param alpha0 - parameter to specify in Weibull model See Details for more information.
-#' @param alpha1 - parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
-#' @param gamma0 - parameter to specify in Weibull model. See Details for more information.
-#' @param beta2 - vector of coefficients for non-treatment group binary variables
-#' @param t0 - pre-specified time at which adjusted SPs for each group are calculated
-#' @param effect - targeted effect size
+#' @description Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given survival probability effect size
 #'
 #'
+#'
+#' @param alpha0 Parameter to specify in Weibull model See Details for more information.
+#' @param alpha1 Parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated
+#' @param gamma0 Parameter to specify in Weibull model. See Details for more information.
+#' @param beta Vector of coefficients for non-treatment group binary variables
+#' @param t0 Pre-specified time at which adjusted SPs for each group are calculated
+#' @param effect Targeted effect size
+#'
+#' @return \eqn{\beta_W}, the coefficient for the treatment group variable
 #' @export
 #'
 #' @examples
-#' rootasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0=1,
+#' rootasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta =0, t0=1,
 #' effect=0.14)
-rootasp = function(alpha0, alpha1, gamma0, beta2, t0, effect) {
+rootasp = function(alpha0, alpha1, gamma0, beta, t0, effect) {
 
   G = function(beta1)
   {
     f1 = function(z)
     {
-      s1 = exp(-gamma0*exp(beta1+beta2*z)*t0**(alpha0+alpha1))
+      s1 = exp(-gamma0*exp(beta1+beta*z)*t0**(alpha0+alpha1))
       f1 = s1*dnorm(z,0,1)
     }
     f0 = function(z)
     {
-      s0 = exp(-gamma0*exp(beta2*z)*t0**alpha0)
+      s0 = exp(-gamma0*exp(beta*z)*t0**alpha0)
       f0 = s0*dnorm(z,0,1)
     }
     S1 = integrate(f1, -10, 10)

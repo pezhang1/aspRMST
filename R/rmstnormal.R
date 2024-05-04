@@ -1,10 +1,10 @@
 
-#' @title Calculates \eqn{I_{max}} for adjusted RMSTs for a normal covariate
+#' @title Calculates \eqn{I_{max}} for adjusted restricted mean survival time difference for a normal covariate
 #' @inherit Imaxasp return
 #'
 #'
 #' @inheritParams Imaxasp
-#' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
 #'
 #' @export
 #'
@@ -24,13 +24,13 @@
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
-#' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
 #' maxE=2, n=200, effect=0.088, NN = 100)
 #' }
 #'
-Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN) {
+Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN) {
   minE = 0
-  beta1 = rootrmst(alpha0, alpha1, gamma0, beta2, t0, effect)
+  beta1 = rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
   umax = t0 + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
@@ -40,7 +40,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
     Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
     Z2 = as.matrix(rnorm(2*n))                             # covariates
     alpha = alpha0+alpha1*Z1
-    gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+    gamma1 = gamma0*exp(beta1*Z1+beta*Z2)
     FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
     CT = NULL
     if (crate == 0)
@@ -81,14 +81,14 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 
 
 
-#' @title Power calculation for a normal covariate
+#' @title Power calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
 #' @inherit powerasp details
 #' @inherit powerasp return
 #' @inheritParams powerasp
 #'
 #'
-#' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
 #'
 #'  @inherit Imaxrmst references
 #'
@@ -98,14 +98,14 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, 
 #' \dontrun{
 #' set.seed(1234)
 #' #1397.7830
-#' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+#' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
 #' maxE=2, n=199, effect=0.088, NN=200, alpha=0.05)
 #' }
 #'
 #'
-powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, alpha) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN)
+powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
   N = n
   zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
   if (effect ==0)
@@ -122,12 +122,12 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 
 
 
-#' @title Sample size calculation for a normal covariate
+#' @title Sample size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
 #' @inherit powerasp details
 #' @inherit powerasp return
 #' @inheritParams Nasp
-#' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
 #'
 #' @inherit Imaxrmst references
 #'
@@ -138,13 +138,13 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect,
 #' \dontrun{
 #' set.seed(1234)
 #' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1,
-#' maxE=2, m = 400, beta2=0, effect = 0.088, NN = 1000, alpha = 0.05, beta=0.2)
+#' maxE=2, m = 400, beta=0, effect = 0.088, NN = 1000, alpha = 0.05, pi=0.8)
 #' }
-Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN, alpha,beta) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n=m, effect = 0, NN)
+Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect = 0, NN)
   M = m
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(1-beta)*sqrt(Veffect*M))^2/effect^2
+  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
 
   return(N)
 }
@@ -156,12 +156,12 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 
 
 
-#' @title Effect size calculation for a normal covariate
+#' @title Effect size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
 #' @inherit ESasp details
 #' @inherit ESasp return
 #' @inheritParams ESasp
-#' @param t0 - Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
 #'
 #' @inherit Imaxrmst references
 #'
@@ -171,16 +171,16 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, m, effect, NN,
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
-#' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-#' maxE=2, n=199, NN=100, alpha=0.05, beta = 0.2, max.iter=10)
+#' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' maxE=2, n=199, NN=100, alpha=0.05, pi = 0.8, max.iter=10)
 #' }
-ESrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=0.05, beta = 0.2, max.iter){
+ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
   zalpha = qnorm(1-alpha/2)
-  zbeta = qnorm(1-beta)
+  zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
   N = n
-  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect = 0, NN)
+  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
@@ -189,7 +189,7 @@ ESrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=
   {
     effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
+    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff
@@ -198,10 +198,10 @@ ESrmst <- function(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, NN, alpha=
       if (V11 > V10)
       {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
-        beta1 = rootrmst(alpha0, alpha1, gamma0, beta2, t0, effect)
+        beta1 = rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
       }    else {
         effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
-        beta1 =  rootrmst(alpha0, alpha1, gamma0, beta2, t0, effect)
+        beta1 =  rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
       }
       break
     }
