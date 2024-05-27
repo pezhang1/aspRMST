@@ -8,19 +8,19 @@
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed(90)
+#'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #'  maxE=200, n=200, effect=0.088, NN=100,p=c(0.5,0.3) )
 #' }
-Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p ) {
+Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p ) {
   minE = 0
-  beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
-  umax = t0 + maxE
+  beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta, tau, effect,p)
+  umax = tau + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
   for (i in 1:NN)
@@ -44,14 +44,14 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, eff
 
     # only use data up to max calendar time u
     Data = Data[Data[,1]<umax,]
-    X = pmin(Data[,2], Data[,3], umax-Data[,1], t0)                    #calculate observed time X
-    delta = as.numeric(Data[,2] < pmin(Data[,3],umax-Data[,1],t0))   #calculate censoring indicator
+    X = pmin(Data[,2], Data[,3], umax-Data[,1], tau)                    #calculate observed time X
+    delta = as.numeric(Data[,2] < pmin(Data[,3],umax-Data[,1],tau))   #calculate censoring indicator
     #table(delta)
     #cbind(X,delta)
 
     # do rmst calculations
 
-    rmstest = rmst(t0 = t0, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
+    rmstest = rmst(tau = tau, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
     rmst.diff.est[i] = rmstest$muD
  #   rmst.diff.se[i] = as.numeric(rmstest$SED)
     #adjsp.diff.ci = adjsp.diff.est + c(-1,1)*qnorm(1-type1/2)*adjsp.diff.se
@@ -77,20 +77,20 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, eff
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' powerrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed(70)
+#' powerrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #' maxE=2, n=196, effect = 0.088, NN=100, alpha=0.05, p=c(0.5, 0.3))
 #' }
-powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha,p) {
-  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p)
-  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN,p)
-  N = n
-  zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
+powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN, alpha,p) {
+  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p)
+  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN,p)
+
+  zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
   else
@@ -109,18 +109,18 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, ef
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#' maxE=2, m=400, effect=0.088, NN=100, alpha=0.05, pi=0.8, p=c(0.5,0.3))
+#' set.seed(60)
+#' Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, tau=1,
+#' maxE=2, m=400, effect=0.08945, NN=100, alpha=0.05, pi=0.8, p=c(0.5,0.3))
 #' }
-Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi = 0.8,p) {
-  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN,p)
-  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect = 0, NN,p)
+Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN, alpha,pi = 0.8,p) {
+  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect, NN,p)
+  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect = 0, NN,p)
   M = m
   N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
 
@@ -139,31 +139,31 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' ESrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed(80)
+#' ESrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #' maxE=2, n=196, NN=100, alpha=0.05, pi = 0.8, max.iter=10, p=c(0.5, 0.3))
 #' }
-ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter=10,p){
+ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter=10,p){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
-  N = n
-  Imax = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN,p)
+ # N = n
+  Imax = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN,p)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
   effect = NULL
   for (j in 1:max.iter)
   {
-    effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(n)      # calculate delta
+    effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p)
+    Imax1 = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff
@@ -171,11 +171,11 @@ ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, a
     {
       if (V11 > V10)
       {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
-        beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V11*n)) / sqrt(n)    #calculate delta
+        beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta, tau, effect,p)
       }    else {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
-        beta1 =  rootrmstbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V10*N)) / sqrt(n)    #calculate delta
+        beta1 =  rootrmstbinary(alpha0, alpha1, gamma0, beta, tau, effect,p)
       }
       break
     }

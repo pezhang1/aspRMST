@@ -43,9 +43,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' #424.7966
-#' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed(567)
+#' #467.13
+#' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
 #' maxE=2, n=200, effect=0, NN=10000)
 #' }
 Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN) {
@@ -78,7 +78,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN
     #table(delta)
     #cbind(X,delta)
 
-    # do rmst calculations
+    # do asp calculations
 
     asp = asp(t0 = t0, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
     asp.diff.est[i] = as.numeric(asp$SPD)
@@ -102,15 +102,26 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN
 #'
 #' @return Power for a trial with the given parameters.
 #'
-#' @description Calculates the power given sample size and effect size via Monte Carlo simulation.
-#' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
-#' the variance in the control group and treatment group, respectively,
-#' by calculating the maximum information for both groups.
-#' The power is then calculated using the equation
-#' \deqn{(\sqrt(N)*effect - z_{\alpha/2}*\sqrt(V_0*N))/\sqrt(V_{effect}*N)}
+#' @details Calculates the power for testing survival probability difference given the sample size and effect size.
+#' See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#' By using MC Monte Carlo replicates of datasets of total sample size N,
+#' \eqn{I_{0}^N} and \eqn{I_{effect}^N} can be calculated,
+#' which are the  information for a trial with total sample size N
+#'  under the null hypothesis with effect size 0 and under a targeted alternative hypothesis
+#'  where the effect size is \eqn{effect}, respectively.
+#' This allows us to calculate \eqn{V_{0}^N = 1/I_{0}^N} and
+#'   \eqn{V_{effect}^N=1/I_{effect}^N}, which are the variance of the estimated difference
+#'    under the respective null and targeted alternative hypotheses for a fixed sample trial
+#'     with total sample size N.
+#' Using the large sample normal distribution of the effect size estimators, the power
+#'  \eqn{\pi} can be expressed as
+#' \deqn{\pi = \Phi \left(\frac{effect \sqrt{N} - z_{1-\alpha/2} \sqrt{V_0^N}}{\sqrt{V_{effect}^N}}\right),}
+#'   where \eqn{\alpha} is the targeted type I error rate and \eqn{z_q=\Phi^{-1}(q)}
+#'    for any \eqn{q \in (0,1)}.
 #'
 #'
-#' @details See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#'
+#'
 #'
 #' @inherit Imaxasp details
 #' @inherit Imaxasp references
@@ -123,16 +134,16 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
+#' set.seed(14)
 #'  #0.8012848
-#'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#'  maxE=2, n = 192, effect=0.14, NN=10000, alpha=0.05)
+#'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
+#'  maxE=2, n = 190, effect=0.135, NN=10000, alpha=0.05) #0.797
 #' }
 powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha) {
   Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
   V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
-  N = n
-  zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
+
+  zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
   else
@@ -147,12 +158,21 @@ powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, N
 #'
 #' @return Sample size for a trial with the given parameters
 #'
-#' @description Calculates the sample size given power and effect size via Monte Carlo simulation.
-#' This function first calculates \eqn{V_{0}} and  \eqn{V_{effect}},
-#' the variance in the control group and treatment group, respectively,
-#' by calculating the maximum information for both groups using an intial sample size of m .
-#' The sample size N is then calculated using the equation
-#' \deqn{N = (z_{\alpha/2}*\sqrt(V_0*M) + z_{\beta}*\sqrt(V_{effect}*M))^2/effect^2}
+#' @details Calculates the sample size for testing survival probability difference given power and effect size via Monte Carlo simulation.
+#'  See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#'  By using MC replicate datasets with an initial sample size M, we can calculate
+#'  \eqn{V_{0}^M=1/I_{0}^M} and \eqn{V_{effect}^M=1/I_{effect}^M}, which represent the variances
+#'  of the estimated differences in M patient trials.
+#'  Under the large sample normal distribution for the effect size estimator,
+#'   the required sample size depends on the unit variance,
+#'   which is the reciprocal of the amount of information contributed by a single patient.
+#'   To obtain the unit variances under the null and targeted alternative hypotheses,
+#'    \eqn{V_{0}^1} and \eqn{V_{effect}^1}, we rescale \eqn{V_{0}^M} and \eqn{V_{effect}^M} by calculating
+#' \eqn{V_{0}^1 = V_{0}^M \cdot M } and \eqn{V_{effect}^1 = V_{effect}^M \cdot M }.
+#' With the individual variances per patient, we can calculate the actual required total sample size N for the trial using the equation
+#' \deqn{N = \frac{\left(z_{1-\alpha/2}\sqrt{V_0^1} + z_{\pi} \sqrt{V_{effect}^1}\right)^2}{effect^2},}
+#'
+#'
 #'
 #' @inherit powerasp details
 #' @inherit Imaxasp references
@@ -166,9 +186,10 @@ powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, N
 #'
 #' @examples
 #' \dontrun{
-#'  set.seed(1234)
-#'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1, maxE=2, m=400,
-#'   effect=0.14, NN=10000, alpha=0.05, pi = 0.8) #191.1381
+#'  set.seed(10)
+#'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95),
+#'   t0=1, maxE=2, m=500,
+#'   effect=0.135, NN=10000, alpha=0.05, pi = 0.8) #189.78*2
 #' }
 Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi=0.8) {
   Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN)
@@ -189,21 +210,26 @@ Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, a
 #' @title Effect size calculation for testing survival probability difference adjusted for a normal covariate
 #'
 #' @return Effect size for a trial given the parameters
-#' @description Calculates the effect size given sample size and power via Monte Carlo simulation.
-#' This function first calculates an initial variance in the treatment group, \eqn{V_{10}},
-#'  by calculating the maximum information
-#' for an effect size of 0.
-#' Then the initial effect size is calculated as
-#' \deqn{effect = (z_{1-\alpha/2} * \sqrt(V_0*N) + z_{\pi} * \sqrt(V_{10}*N)) / sqrt(N)}
-#' Using this effect size, \eqn{V_{11}} is calculated and
-#'  set as the updated variance of the treatment group.
-#'  \eqn{V_{10}} is set as \eqn{V_{11}} and this process is repeated
-#'  until convergence occurs.
+#'
+#' @details Calculates the effect size for testing survival probability difference given sample size and power via Monte Carlo simulation.
+#'  See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#'   Because the targeted effect size impacts the sample size formula through the two terms
+#'    \eqn{effect} and \eqn{V_{effect}^N},
+#'     we use an iterative procedure to obtain the required \eqn{effect}.
+#' We first calculate an initial variance in the treatment group, \eqn{V_{10}^N},
+#' by calculating \eqn{I_{0}^N} and initializing \eqn{V_{10}^N = 1/I_{0}^N}.
+#' Then, the initial effect size is calculated as
+#' \deqn{effect_0 = z_{1-\alpha/2} \sqrt{V_0^N} + z_{\pi} \sqrt{V_{10}^N}.}
+#' Using this effect size, \eqn{V_{effect_0}^N} is calculated by taking the reciprocal
+#'  of the information for a trial with effect size \eqn{effect_0}.
+#'  \eqn{V_{10}^N} is then updated to \eqn{V_{effect_0}^N}.
+#'  This updating of \eqn{effect_0} and \eqn{V_{10}^N} is repeated
+#  until convergence occurs.
 #'
 #'
 #'
 #'
-#' @inherit powerasp details
+#'
 #'
 #'
 #'
@@ -222,8 +248,8 @@ Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, a
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
-#' ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#' maxE=2, n=192, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1397
+#' ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
+#' maxE=2, n=190, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
 #' }
 ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
                   maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
@@ -231,7 +257,7 @@ ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
-  N = n
+  #N = n
   Imax = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
   Vnull = 1/Imax
   V10 = 1/Imax
@@ -239,7 +265,7 @@ ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
   effect = NULL
   for (j in 1:max.iter)
   {
-    effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(N)      # calculate delta
+    effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
     Imax1 = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
     V11 = 1 / Imax1
@@ -249,10 +275,10 @@ ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
     {
       if (V11 > V10)
       {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V11*n)) / sqrt(n)    #calculate delta
         beta1 = rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
       }    else {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V10*n)) / sqrt(n)    #calculate delta
         beta1 =  rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
       }
       break

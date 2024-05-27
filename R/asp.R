@@ -38,8 +38,8 @@
 #'
 #' @examples
 #'
-#' t0 = 1
-#' set.seed(1234)
+#'
+#'
 #' t0 = 1
 #' n0 = 400
 #' n1 = 400
@@ -59,8 +59,8 @@
 #' X = pmin(FT,CT)
 #' Status = as.numeric(FT <= CT)     & (X <= t0)
 #' Time = pmin(X,t0)
-#' asp(t0,Time,Status,Z,TRT)$SPD #0.09488613
-#' asp(t0,Time,Status,Z,TRT)$SED #0.06942817
+#' asp(t0,Time,Status,Z,TRT)
+#'
 asp = function(t0,Time,Status,Z,TRT) {
   n= length(TRT)
   n1 = sum(TRT)

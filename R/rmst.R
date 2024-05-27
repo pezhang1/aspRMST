@@ -24,7 +24,7 @@
 #'
 #'
 #'
-#' @param t0 Pre-specified time point, RMST estimate is calculated over(0, t0)
+#' @param tau Pre-specified survival horizon time for adjusted restricted mean survival times
 #' @param Time Observed times
 #' @param Status Event indicator (0 = Censored, 1 = Observed)
 #' @param Z Non-treatment group covariates
@@ -46,8 +46,8 @@
 #'
 #'
 #' @examples
-#' set.seed(1234)
-#' t0 = 1
+#'
+#' tau = 1
 #' n0 = 400
 #' n1 = 400
 #' n = n0 + n1
@@ -64,32 +64,32 @@
 #' FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
 #' CT = rexp(n, rate=crate)
 #' X = pmin(FT,CT)
-#' Status = as.numeric(FT <= CT)     & (X <= t0)
-#' Time = pmin(X,t0)
-#' rmst(t0,Time,Status,Z,TRT)$muD #0.01355406
-#' rmst(t0,Time,Status,Z,TRT)$SED # 0.04315677
+#' Status = as.numeric(FT <= CT)     & (X <= tau)
+#' Time = pmin(X,tau)
+#' rmst(tau,Time,Status,Z,TRT)$muD #
+#' rmst(tau,Time,Status,Z,TRT)$SED #
 #'
-rmst = function(t0,Time,Status,Z,TRT){
+rmst = function(tau,Time,Status,Z,TRT){
   # Calculate RMST difference and its standard error
 
 
-  SPSE = aspinternal(t0,Time,Status,Z,TRT)
+  SPSE = aspinternal(tau,Time,Status,Z,TRT)
   n0 = SPSE$n0
   n1 = SPSE$n1
   n  = SPSE$n
   SigmaInv = SPSE$SigmaInv
   x0 = SPSE$X0
   x1 = SPSE$X1
-  dx0 = diff(c(x0,t0),lag=1)
-  dx1 = diff(c(x1,t0),lag=1)
+  dx0 = diff(c(x0,tau),lag=1)
+  dx1 = diff(c(x1,tau),lag=1)
 
 
 
   # Calculate RMST difference
-  # Calculate B1i(u,t) and B2i(u,t) at t0.
-  # Calculate Psi(iu,t) at t0.
-  # Calculate B3(u,t) at t0.
-  # Calculate mui(u|Z) at t0.
+  # Calculate B1i(u,t) and B2i(u,t) at tau.
+  # Calculate Psi(iu,t) at tau.
+  # Calculate B3(u,t) at tau.
+  # Calculate mui(u|Z) at tau.
   sp0 = C01 = Gamma0 = Lambda0 = NULL
   C02 = QQ0 = matrix(0,length(x0),dim(Z)[2])
   cs0 = matrix(0,dim(Z)[1],length(x0))

@@ -13,9 +13,9 @@
 #' @export
 #'
 #' @examples
-#' rootrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta =0, t0 = 1,
+#' rootrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta =0, tau = 1,
 #'  effect=0.1, p =c(0.2,0.5))
-rootrmstbinary = function(alpha0, alpha1, gamma0, beta, t0, effect,p ) {
+rootrmstbinary = function(alpha0, alpha1, gamma0, beta, tau, effect,p ) {
 
 
   Diff=function(beta1)
@@ -38,8 +38,8 @@ rootrmstbinary = function(alpha0, alpha1, gamma0, beta, t0, effect,p ) {
 
       Lambda0s[i] = gamma0*exp((sum(beta*values[i, ])))
       Lambda1s[i] = gamma0*exp(beta1+(sum(beta*values[i, ])))
-      f0s[i] = gamma(1+1/Alpha0) * pgamma(t0**Alpha0,shape=1/Alpha0,rate=Lambda0s[i]) / Lambda0s[i]**(1/Alpha0) *prod(probs[i,])
-      f1s[i] = gamma(1+1/Alpha1) * pgamma(t0**Alpha1,shape=1/Alpha1,rate=Lambda1s[i]) / Lambda1s[i]**(1/Alpha1) *prod(probs[i,])
+      f0s[i] = gamma(1+1/Alpha0) * pgamma(tau**Alpha0,shape=1/Alpha0,rate=Lambda0s[i]) / Lambda0s[i]**(1/Alpha0) *prod(probs[i,])
+      f1s[i] = gamma(1+1/Alpha1) * pgamma(tau**Alpha1,shape=1/Alpha1,rate=Lambda1s[i]) / Lambda1s[i]**(1/Alpha1) *prod(probs[i,])
     }
     f0 = sum(f0s)
     f1 = sum(f1s)

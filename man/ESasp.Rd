@@ -2,76 +2,78 @@
 % Please edit documentation in R/aspnormal.R
 \name{ESasp}
 \alias{ESasp}
-\title{Effect size calculation for a normal covariate}
+\title{Effect size calculation for testing survival probability difference adjusted for a normal covariate}
 \usage{
 ESasp(
   alpha0,
   alpha1,
   gamma0,
-  beta2,
+  beta,
   crate,
   t0,
   maxE,
   n,
   NN,
   alpha = 0.05,
-  beta = 0.2,
+  pi = 0.8,
   max.iter
 )
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Coefficient of normal covariate}
+\item{beta}{Coefficient of normal covariate}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted SPs for each group are calculated}
+\item{t0}{Pre-specified time at which adjusted SPs for each group are calculated}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{- Sample size per group}
+\item{n}{Sample size per group}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- Targeted type I error rate}
+\item{alpha}{Targeted type I error rate}
 
-\item{beta}{- Targeted type II error rate}
+\item{pi}{Targeted power}
 
-\item{max.iter}{- Maximum number of iterations to calculate the effect size}
+\item{max.iter}{Maximum number of iterations to calculate the effect size}
 }
 \value{
 Effect size for a trial given the parameters
 }
 \description{
-Calculates the effect size given sample size and power via Monte Carlo simulation
-This function first calculates an initial variance in the treatment group, \eqn{V_{10}},
- by calculating the maximum information
-for an effect size of 0.
-Then the initial effect size is calculated as #'
-\deqn{effect = (zalpha * sqrt(V0*N) + zbeta * sqrt(V10*N)) / sqrt(N)}
-Using this effect size, \eqn{V_{11}} is calculated and
- set as the updated variance of the treatment group.
- \eqn{V_{10}} is set as \eqn{V_{11}} and this process is repeated
- until convergence occurs.
-
-Calculate effect size given power and sample size
+Effect size calculation for testing survival probability difference adjusted for a normal covariate
 }
 \details{
-See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+Calculates the effect size for testing survival probability difference given sample size and power via Monte Carlo simulation.
+ See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+  Because the targeted effect size impacts the sample size formula through the two terms
+   \eqn{effect} and \eqn{V_{effect}^N},
+    we use an iterative procedure to obtain the required \eqn{effect}.
+We first calculate an initial variance in the treatment group, \eqn{V_{10}^N},
+by calculating \eqn{I_{0}^N} and initializing \eqn{V_{10}^N = 1/I_{0}^N}.
+Then, the initial effect size is calculated as
+\deqn{effect_0 = z_{1-\alpha/2} \sqrt{V_0^N} + z_{\pi} \sqrt{V_{10}^N}.}
+Using this effect size, \eqn{V_{effect_0}^N} is calculated by taking the reciprocal
+ of the information for a trial with effect size \eqn{effect_0}.
+ \eqn{V_{10}^N} is then updated to \eqn{V_{effect_0}^N}.
+ This updating of \eqn{effect_0} and \eqn{V_{10}^N} is repeated
 }
 \examples{
 \dontrun{
-ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-maxE=2, n=191, NN = 10000, alpha=0.05, beta = 0.2, max.iter=10)
+set.seed(1234)
+ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
+maxE=2, n=190, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
 }
 }
 \references{
-Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression

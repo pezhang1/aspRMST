@@ -2,62 +2,74 @@
 % Please edit documentation in R/rmstnormal.R
 \name{ESrmst}
 \alias{ESrmst}
-\title{Effect size calculation for a normal covariate}
+\title{Effect size calculation for testing restricted mean survival time difference adjusted for a normal covariate}
 \usage{
 ESrmst(
   alpha0,
   alpha1,
   gamma0,
-  beta2,
+  beta,
   crate,
-  t0,
+  tau,
   maxE,
   n,
   NN,
   alpha = 0.05,
-  beta = 0.2,
+  pi = 0.8,
   max.iter
 )
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Coefficient of normal covariate}
+\item{beta}{Coefficient of normal covariate}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{- Sample size per group}
+\item{n}{Sample size per group}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- Targeted type I error rate}
+\item{alpha}{Targeted type I error rate}
 
-\item{beta}{- Targeted type II error rate}
+\item{pi}{Targeted power}
 
-\item{max.iter}{- Maximum number of iterations to calculate the effect size}
+\item{max.iter}{Maximum number of iterations to calculate the effect size}
 }
 \value{
 Effect size for a trial given the parameters
 }
 \description{
-Effect size calculation for a normal covariate
+Effect size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 }
 \details{
-See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+Calculates the effect size for testing survival probability difference given sample size and power via Monte Carlo simulation.
+ See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+  Because the targeted effect size impacts the sample size formula through the two terms
+   \eqn{effect} and \eqn{V_{effect}^N},
+    we use an iterative procedure to obtain the required \eqn{effect}.
+We first calculate an initial variance in the treatment group, \eqn{V_{10}^N},
+by calculating \eqn{I_{0}^N} and initializing \eqn{V_{10}^N = 1/I_{0}^N}.
+Then, the initial effect size is calculated as
+\deqn{effect_0 = z_{1-\alpha/2} \sqrt{V_0^N} + z_{\pi} \sqrt{V_{10}^N}.}
+Using this effect size, \eqn{V_{effect_0}^N} is calculated by taking the reciprocal
+ of the information for a trial with effect size \eqn{effect_0}.
+ \eqn{V_{10}^N} is then updated to \eqn{V_{effect_0}^N}.
+ This updating of \eqn{effect_0} and \eqn{V_{10}^N} is repeated
 }
 \examples{
 \dontrun{
-set.seed(1234)
-ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-maxE=2, n=199, NN=100, alpha=0.05, beta = 0.2, max.iter=10)
+set.seed()
+ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
+maxE=2, n=199, NN=100, alpha=0.05, pi = 0.8, max.iter=10)
 }
 }
 \references{

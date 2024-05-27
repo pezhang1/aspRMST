@@ -3,12 +3,21 @@
 #' @inherit Imaxasp return
 #'
 #'
-#' @inheritParams Imaxasp
-#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @param alpha0 Parameter to specify in Weibull model. See Details for more information.
+#' @param alpha1 Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated
+#' @param gamma0 Parameter to specify in Weibull model. See Details for more information.
+#' @param beta Coefficient of normal covariate
+#' @param crate Censoring rate, assumes an exponential distribution
+#' @param tau Pre-specified survival horizon time for adjusted restricted mean survival times
+#' @param maxE Maximum enrollment time. Assumes uniform enrollment between [0, maxE]
+#' @param n Sample size per group
+#' @param effect Targeted effect size
+#' @param NN Number of iterations used to calculate the maximum information
+#'
 #'
 #' @export
 #'
-#'
+#' @return
 #'
 #' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
 #' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
@@ -23,15 +32,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed(50)
+#' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #' maxE=2, n=200, effect=0.088, NN = 100)
 #' }
 #'
-Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN) {
+Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN) {
   minE = 0
-  beta1 = rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
-  umax = t0 + maxE
+  beta1 = rootrmst(alpha0, alpha1, gamma0, beta, tau, effect)
+  umax = tau + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
   for (i in 1:NN)
@@ -52,14 +61,14 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, N
 
     # only use data up to max calendar time u
     Data = Data[Data[,1]<umax,]
-    X = pmin(Data[,2], Data[,3], umax-Data[,1], t0)                    #calculate observed time X
-    delta = as.numeric(Data[,2] < pmin(Data[,3],umax-Data[,1],t0))   #calculate censoring indicator
+    X = pmin(Data[,2], Data[,3], umax-Data[,1], tau)                    #calculate observed time X
+    delta = as.numeric(Data[,2] < pmin(Data[,3],umax-Data[,1],tau))   #calculate censoring indicator
     #table(delta)
     #cbind(X,delta)
 
     # do rmst calculations
 
-    rmstest = rmst(t0 = t0, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
+    rmstest = rmst(tau = tau, Time = X, Status = delta, Z = as.matrix(Data[, 5:dim(Data)[2]]), TRT= Data[, 4])
     rmst.diff.est[i] = rmstest$muD
    # rmst.diff.se[i] = as.numeric(rmstest$SED)
     #adjsp.diff.ci = adjsp.diff.est + c(-1,1)*qnorm(1-type1/2)*adjsp.diff.se
@@ -83,31 +92,47 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, N
 
 #' @title Power calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
-#' @inherit powerasp details
+#' @details Calculates the power for testing survival probability difference given the sample size and effect size.
+#' See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#' By using MC Monte Carlo replicates of datasets of total sample size N,
+#' \eqn{I_{0}^N} and \eqn{I_{effect}^N} can be calculated,
+#' which are the  information for a trial with total sample size N
+#'  under the null hypothesis with effect size 0 and under a targeted alternative hypothesis
+#'  where the effect size is \eqn{effect}, respectively.
+#' This allows us to calculate \eqn{V_{0}^N = 1/I_{0}^N} and
+#'   \eqn{V_{effect}^N=1/I_{effect}^N}, which are the variance of the estimated difference
+#'    under the respective null and targeted alternative hypotheses for a fixed sample trial
+#'     with total sample size N.
+#' Using the large sample normal distribution of the effect size estimators, the power
+#'  \eqn{\pi} can be expressed as
+#' \deqn{\pi = \Phi \left(\frac{effect \sqrt{N} - z_{1-\alpha/2} \sqrt{V_0^N}}{\sqrt{V_{effect}^N}}\right),}
+#'   where \eqn{\alpha} is the targeted type I error rate and \eqn{z_q=\Phi^{-1}(q)}
+#'    for any \eqn{q \in (0,1)}.
+#'
+#'
+#'
 #' @inherit powerasp return
-#' @inheritParams powerasp
-#'
-#'
-#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @inheritParams Imaxrmst
+#' @param alpha Targeted type I error rate
 #'
 #'  @inherit Imaxrmst references
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
+#' set.seed(30)
 #' #1397.7830
-#' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #' maxE=2, n=199, effect=0.088, NN=200, alpha=0.05)
 #' }
 #'
 #'
-powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
-  N = n
-  zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
+powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN, alpha) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN)
+
+  zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
   else
@@ -124,25 +149,39 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, 
 
 #' @title Sample size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
-#' @inherit powerasp details
+#' @details Calculates the sample size for testing survival probability difference given power and effect size via Monte Carlo simulation.
+#'  See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#'  By using MC replicate datasets with an initial sample size M, we can calculate
+#'  \eqn{V_{0}^M=1/I_{0}^M} and \eqn{V_{effect}^M=1/I_{effect}^M}, which represent the variances
+#'  of the estimated differences in M patient trials.
+#'  Under the large sample normal distribution for the effect size estimator,
+#'   the required sample size depends on the unit variance,
+#'   which is the reciprocal of the amount of information contributed by a single patient.
+#'   To obtain the unit variances under the null and targeted alternative hypotheses,
+#'    \eqn{V_{0}^1} and \eqn{V_{effect}^1}, we rescale \eqn{V_{0}^M} and \eqn{V_{effect}^M} by calculating
+#' \eqn{V_{0}^1 = V_{0}^M \cdot M } and \eqn{V_{effect}^1 = V_{effect}^M \cdot M }.
+#' With the individual variances per patient, we can calculate the actual required total sample size N for the trial using the equation
+#' \deqn{N = \frac{\left(z_{1-\alpha/2}\sqrt{V_0^1} + z_{\pi} \sqrt{V_{effect}^1}\right)^2}{effect^2},}
+#'
 #' @inherit powerasp return
-#' @inheritParams Nasp
-#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @inheritParams powerrmst
+#' @param m Sample size used to calculate the maximum information, Imax
+#' @param pi Targeted power
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1,
-#' maxE=2, m = 400, beta=0, effect = 0.088, NN = 1000, alpha = 0.05, pi=0.8)
+#' set.seed(40)
+#' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = -log(0.95), tau=1,
+#' maxE=2, m = 500, beta=log(1.5), effect = 0.0863, NN = 100, alpha = 0.05, pi=0.8)
 #' }
-Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect = 0, NN)
+Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN, alpha,pi) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect, NN)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect = 0, NN)
   M = m
   N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
 
@@ -158,38 +197,57 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, 
 
 #' @title Effect size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 #'
-#' @inherit ESasp details
+#' @details Calculates the effect size for testing survival probability difference given sample size and power via Monte Carlo simulation.
+#'  See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+#'   Because the targeted effect size impacts the sample size formula through the two terms
+#'    \eqn{effect} and \eqn{V_{effect}^N},
+#'     we use an iterative procedure to obtain the required \eqn{effect}.
+#' We first calculate an initial variance in the treatment group, \eqn{V_{10}^N},
+#' by calculating \eqn{I_{0}^N} and initializing \eqn{V_{10}^N = 1/I_{0}^N}.
+#' Then, the initial effect size is calculated as
+#' \deqn{effect_0 = z_{1-\alpha/2} \sqrt{V_0^N} + z_{\pi} \sqrt{V_{10}^N}.}
+#' Using this effect size, \eqn{V_{effect_0}^N} is calculated by taking the reciprocal
+#'  of the information for a trial with effect size \eqn{effect_0}.
+#'  \eqn{V_{10}^N} is then updated to \eqn{V_{effect_0}^N}.
+#'  This updating of \eqn{effect_0} and \eqn{V_{10}^N} is repeated
+#  until convergence occurs.
+#'
+#'
+#'
 #' @inherit ESasp return
-#' @inheritParams ESasp
-#' @param t0 Pre-specified time at which adjusted RMSTs for each group are calculated
+#' @inheritParams Imaxrmst
+#'
+#' @param alpha Targeted type I error rate
+#' @param pi Targeted power
+#' @param max.iter Maximum number of iterations to calculate the effect size
 #'
 #' @inherit Imaxrmst references
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, t0=1,
+#' set.seed()
+#' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 #' maxE=2, n=199, NN=100, alpha=0.05, pi = 0.8, max.iter=10)
 #' }
-ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
+ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
-  N = n
-  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
+  #N = n
+  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
   effect = NULL
   for (j in 1:max.iter)
   {
-    effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(n)      # calculate delta
+    effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
+    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff
@@ -197,11 +255,11 @@ ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, alpha=0
     {
       if (V11 > V10)
       {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
-        beta1 = rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V11*n)) / sqrt(n)    #calculate delta
+        beta1 = rootrmst(alpha0, alpha1, gamma0, beta, tau, effect)
       }    else {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
-        beta1 =  rootrmst(alpha0, alpha1, gamma0, beta, t0, effect)
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V10*n)) / sqrt(n)    #calculate delta
+        beta1 =  rootrmst(alpha0, alpha1, gamma0, beta, tau, effect)
       }
       break
     }

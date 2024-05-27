@@ -10,14 +10,14 @@
 #' @param beta Vector of coefficients for binary covariates
 #' @param p Vector of probabilities for binary covariates
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#' maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3)) #423.1060
+#' set.seed(888)
+#' Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+#' maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3)) #572.23
 #' }
 Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p) {
   asp.diff.est = NULL
@@ -70,7 +70,7 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effe
 
 #' @title Power calculation for testing survival probability difference adjusted for binary covariates
 #' @inherit powerasp return
-#' @inherit powerasp description
+#'
 #' @inherit powerasp details
 #'
 #' @inheritParams powerasp
@@ -79,20 +79,20 @@ Imaxaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effe
 #'
 #'
 #' @inherit Imaxasp references
-#'
+#'@return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#' maxE=2, n=223, effect=0.13, NN=10000, alpha = 0.05, p =c(0.5, 0.3)) #0.7964
+#' set.seed(16)
+#' poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+#' maxE=2, n=193, effect=0.121, NN=10000, alpha = 0.05, p =c(0.5, 0.3)) #0.800
 #' }
 poweraspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha=0.05,p) {
   Veffect = 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p)
   V0= 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN,p)
   N = n
-  zbeta = (sqrt(N)*effect - qnorm(1-alpha/2)*sqrt(V0*N))/sqrt(Veffect*N)
+  zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
   else
@@ -106,7 +106,7 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, eff
 
 #' @title Sample size calculation for testing survival probability difference adjusted for binary covariates
 #' @inherit Nasp return
-#' @inherit Nasp description
+#'
 #' @inherit Nasp details
 #'
 #' @inherit Imaxasp references
@@ -116,14 +116,14 @@ poweraspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, eff
 #'
 #'
 #' @param p Vector of probabilities for binary covariates
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=0, crate=0, t0=1,
-#'  maxE=2, m=400, effect=0.13, NN=10000, alpha=0.05, pi = 0.8, p =c(0.5, 0.3)) #222.6704
+#' set.seed(8)
+#' Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+#'  maxE=2, m=500, effect=0.121, NN=10000, alpha=0.05, pi = 0.8, p =c(0.5, 0.3)) #192.27*2
 
 #' }
 #'
@@ -154,7 +154,7 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect,
 #' @title Effect size calculation for testing survival probability difference adjusted for binary covariates
 #'
 #' @inherit ESasp return
-#' @inherit Esasp description
+#'
 #'
 #' @inheritParams ESasp
 #'
@@ -164,21 +164,21 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect,
 #' @param beta Vector of coefficients for binary covariates
 #' @param p Vector of probabilities for binary covariates
 #'
-#'
+#' @return
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(1234)
-#' ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta=0, crate=0, t0=1,
-#'  maxE=2, n=223, NN = 10000, alpha=0.05, pi = 0.8, max.iter=10, p =c(0.5,0.3)) #0.129456
+#' set.seed(23)
+#' ESaspbinary(alpha0 = 1.5, alpha1 = -1, gamma0 = -log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+#'  maxE=2, n=193, NN = 10000, alpha=0.05, pi = 0.8, max.iter=10, p =c(0.5,0.3)) #0.1218265
 #' }
 ESaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, alpha=0.05, pi=0.8, max.iter, p){
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
-  N = n
+  #N = n
   Imax = Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN,p)
   Vnull = 1/Imax
   V10 = 1/Imax
@@ -186,7 +186,7 @@ ESaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, al
   effect = NULL
   for (j in 1:max.iter)
   {
-    effect = (zalpha * sqrt(Vnull*N) + zbeta * sqrt(V10*N)) / sqrt(N)      # calculate delta
+    effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
     beta1 = rootaspbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
     Imax1 = Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN,p)
     V11 = 1 / Imax1
@@ -196,10 +196,10 @@ ESaspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, NN, al
     {
       if (V11 > V10)
       {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V11*N)) / sqrt(N)    #calculate delta
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V11*n)) / sqrt(n)    #calculate delta
         beta1 = rootaspbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
       }    else {
-        effect = (zalpha*sqrt(Vnull*N) + zbeta*sqrt(V10*N)) / sqrt(N)    #calculate delta
+        effect = (zalpha*sqrt(Vnull*n) + zbeta*sqrt(V10*n)) / sqrt(n)    #calculate delta
         beta1 =  rootaspbinary(alpha0, alpha1, gamma0, beta, t0, effect,p)
       }
       break

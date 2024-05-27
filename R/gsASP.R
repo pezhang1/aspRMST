@@ -10,6 +10,7 @@
 #' @param t0 Pre-specified time point of analysis
 #' @param Time Observed times
 #' @param Status Event indicator (0 = censored, 1 = observed)
+#' @param Imax Maximum information
 #' @param Z Non-treatment group covariates
 #' @param TRT Treatment group indicator (0 = Control, 1 = Treatment)
 #' @param E Enrollment times
@@ -30,13 +31,13 @@
 #' @examples
 #' \dontrun{
 #' library(survival)
-#'
+#' set.seed(2024)
 #' alpha0 = 1.5
 #' alpha1 = -1
 #' beta1 = -0.399782432
 #' n=200
-#' crate =0
-#' beta2=0
+#' crate =-log(0.95)
+#' beta2=log(1.5)
 #' t0=1
 #' gamma0 = -log(0.4)
 #' maxE = 2
@@ -54,12 +55,12 @@
 #' Data = cbind(E,FT,CT,Z1,Z2)
 #' delta = as.numeric(FT < CT)
 #' X = pmin(FT,CT)
-#' test <- gsASP(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
-#' test$Crit #2.802284 2.283383 2.037149
-#' test$Z #2.545480 2.792856 2.628482
+#' test <- gsASP(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, Imax =450,  E = E, alpha = 0.05, u =u)
+#' test$Crit #2.790759 2.475604 2.012867
+#' test$Z # 2.227619 2.165275 2.607175
 #' }
 #'
-gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
+gsASP = function(t0,Time,Status,Z,TRT, E, Imax, alpha = 0.05, u) {
 
 
   data = as.data.frame(cbind(TRT, E, Time, Status, Z))
@@ -78,8 +79,9 @@ gsASP = function(t0,Time,Status,Z,TRT, E, alpha = 0.05, u) {
     spd[i] = output$SPD
     spdse[i] = output$SED
   }
-  Imax = 1/spdse[length(u)]^2
+  #Imax = 1/spdse[length(u)]^2
   IF = (1/spdse^2)/Imax
+  IF[length(IF)] = 1
   Z = spd/spdse
   Crit =gsDesign(k = length(u), test.type=2, timing = IF, sfu = sfPower, sfupar = 3)$upper$bound
   return(list(Z = Z, Crit = Crit))
