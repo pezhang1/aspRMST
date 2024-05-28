@@ -2,29 +2,29 @@
 % Please edit documentation in R/rmst.R
 \name{rmst}
 \alias{rmst}
-\title{RMST}
+\title{Calculate adjusted restricted mean survival times}
 \usage{
-rmst(t0, Time, Status, Z, TRT)
+rmst(tau, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- Pre-specified time point, RMST estimate is calculated over(0, t0)}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{Time}{- Observed times}
+\item{Time}{Observed times}
 
-\item{Status}{- Event indicator (0 = Censored, 1 = Observed)}
+\item{Status}{Event indicator (0 = Censored, 1 = Observed)}
 
-\item{Z}{- Non-treatment group covariates}
+\item{Z}{Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
+\item{TRT}{Treatment group indicator (0 = Control, 1 = Treatment)}
 }
 \value{
 \itemize{
-  \item muD - Adjusted SP difference estimate
-  \item SED - Standard error estimate of adjusted SP difference estimate
-  \item mu0 - Adjusted SP of treatment group 0
-  \item mu1 - Adjusted SP of treatment group 1
-  \item SE0 - Standard error of adjusted SP of treatment group 0
-  \item SE1 - Standard error of adjusted SP of treatment group 1
+  \item muD Adjusted SP difference estimate
+  \item SED Standard error estimate of adjusted SP difference estimate
+  \item mu0 Adjusted SP of treatment group 0
+  \item mu1 Adjusted SP of treatment group 1
+  \item SE0 Standard error of adjusted SP of treatment group 0
+  \item SE1 Standard error of adjusted SP of treatment group 1
 }
 }
 \description{
@@ -35,10 +35,10 @@ RMST estimates and standard error estimates
 are also provided for each group.
 }
 \examples{
-set.seed(123)
-t0 = 1
-n0 = 100
-n1 = 100
+
+tau = 1
+n0 = 400
+n1 = 400
 n = n0 + n1
 alpha0 = 1.5
 alpha1 = -0.3
@@ -53,10 +53,10 @@ gamma1 = gamma0*exp(beta1*TRT+beta2*Z)
 FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
 CT = rexp(n, rate=crate)
 X = pmin(FT,CT)
-Status = as.numeric(FT <= CT)     & (X <= t0)
-Time = pmin(X,t0)
-rmst(t0,Time,Status,Z,TRT)$muD
-rmst(t0,Time,Status,Z,TRT)$SED
+Status = as.numeric(FT <= CT)     & (X <= tau)
+Time = pmin(X,tau)
+rmst(tau,Time,Status,Z,TRT)$muD #
+rmst(tau,Time,Status,Z,TRT)$SED #
 
 }
 \references{

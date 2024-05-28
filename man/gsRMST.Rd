@@ -2,57 +2,53 @@
 % Please edit documentation in R/gsRMST.R
 \name{gsRMST}
 \alias{gsRMST}
-\title{Group sequential test of adjusted RMSTs}
+\title{Group sequential test of adjusted restricted mean survival times}
 \usage{
-gsRMST(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
+gsRMST(tau, Time, Status, Z, TRT, E, Imax, alpha = 0.05, u)
 }
 \arguments{
-\item{t0}{-  Pre-specified time point of analysis}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{Time}{- Observed times}
+\item{Time}{Observed times}
 
-\item{Status}{- Event indicator (0 = censored, 1 = observed)}
+\item{Status}{Event indicator (0 = censored, 1 = observed)}
 
-\item{Z}{- Non-treatment group covariates}
+\item{Z}{Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
+\item{TRT}{Treatment group indicator (0 = Control, 1 = Treatment)}
 
-\item{E}{- Enrollment times}
+\item{E}{Enrollment times}
 
-\item{alpha}{- Targeted type I error rate}
+\item{Imax}{Maximum information}
 
-\item{u}{- Calendar times of analysis
+\item{alpha}{Targeted type I error rate}
 
-
-
-
-
- @return
- \itemize{
-  \item Z - Vector of test statistics
-  \item Crit - Vector of tritical values
-   }}
+\item{u}{Calendar times of analysis}
 }
 \value{
 \itemize{
-  \item Z - Vector of test statistics
-  \item Crit - Vector of critical values
-   }
+ \item  muD - Vector of estimated restricted mean survival time differences
+  \item SED - Vector of estimated standard errors of estimated restricted mean survival time differences
+  \item IF - Vector of information fractions
+  \item TStat Vector of test statistics
+  \item Crit Vector of critical values
+}
 }
 \description{
-Performs a group sequential test of adjusted RMSTs between two treatment groups
+Performs a group sequential test of adjusted restricted mean survival times (RMST)s between two treatment groups
 when provided the time point of analysis, the observed times, event indicator,
 covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 }
 \examples{
 \dontrun{
+set.seed(1000)
 alpha0 = 1.5
 alpha1 = -0.3
 beta1 = -0.61335306
 n=200
 crate =0
 beta2=0
-t0=1
+tau=1
 gamma0 = -log(0.4)
 maxE = 2
 u = c(1.3, 1.8, 3)
@@ -68,9 +64,10 @@ if (crate == 0)
 {CT = rexp(2*n, rate=crate)}
 Data = cbind(E,FT,CT,Z1,Z2)
 delta = as.numeric(FT < CT)
-test <- gsRMST(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
-test$Z
-test$Crit
+X = pmin(FT,CT)
+test <- gsRMST(tau = tau,Time = X,Status = delta,Z = Z2,TRT = Z1, Imax=1100, E = E, alpha = 0.05, u =u)
+test$Z #1.051475 1.990320 2.232713
+test$Crit # 2.818662 2.383526 2.022924
 }
 
 

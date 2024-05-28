@@ -2,54 +2,66 @@
 % Please edit documentation in R/asp.R
 \name{asp}
 \alias{asp}
-\title{Adjusted SP}
+\title{Calculate adjusted survival probabilities}
 \usage{
 asp(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- Pre-specified time point of analysis}
+\item{t0}{Pre-specified time point of analysis}
 
-\item{Time}{- Observed times}
+\item{Time}{Observed times}
 
-\item{Status}{- Event indicator (0 = censored, 1 = observed)}
+\item{Status}{Event indicator (0 = censored, 1 = observed)}
 
-\item{Z}{- Non-treatment group covariates}
+\item{Z}{Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = control, 1 = treatment)}
+\item{TRT}{Treatment group indicator (0 = control, 1 = treatment)}
 }
 \value{
 \itemize{
-  \item SPD - Adjusted SP difference estimate
-  \item SED - Standard error estimate of adjusted SP difference estimate
-  \item S0 - Adjusted SP estimate for treatment group 0
-  \item S1 - Adjusted SP estimate for treatment group 1
-  \item SE0 - Standard error estimate of adjusted SP estimate for treatment group 0
-  \item SE1 - Standard error estimate of adjusted SP estimate for treatment group 1
+  \item SPD Adjusted SP difference estimate
+  \item SED Standard error estimate of adjusted SP difference estimate
+  \item S0 Adjusted SP estimate for treatment group 0
+  \item S1 Adjusted SP estimate for treatment group 1
+  \item SE0 Standard error estimate of adjusted SP estimate for treatment group 0
+  \item SE1 Standard error estimate of adjusted SP estimate for treatment group 1
 }
 }
 \description{
-Calculates the adjusted SP difference between two treatment groups
+Calculates the adjusted survival probability (SP) difference between two treatment groups
 at a pre-specified time point via a treatment-stratified Cox proportional hazards model.
 Standard error estimates for the estimated difference are also calculated.
 Adjusted SP estimates and standard error estimates
 are also provided for each group.
 }
 \examples{
-set.seed(1234)
+
+
+
 t0 = 1
-TRT = c(rep(0,5),rep(1,5))
-Z = cbind(rnorm(10))
-FT = c(0.30,  0.58,  0.41,  0.0333,  0.58,  0.10,  0.83,  2.45,  8.7, 17.1)
-CT = c(0.20, 0.8, 0.73, 0.24, 0.5, 0.25, 1.3, 3.6, 10, 20.5)
+n0 = 400
+n1 = 400
+n = n0 + n1
+alpha0 = 1.5
+alpha1 = -1
+gamma0 = -log(0.4)
+beta1 = -0.5
+beta2 = log(1.5)
+crate = -log(0.95)
+TRT = c(rep(0,n0),rep(1,n1))                        # treatment indicator
+Z = cbind(rnorm(n))                               # covariates
+alpha = alpha0+alpha1*TRT
+gamma1 = gamma0*exp(beta1*TRT+beta2*Z)
+FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
+CT = rexp(n, rate=crate)
 X = pmin(FT,CT)
 Status = as.numeric(FT <= CT)     & (X <= t0)
 Time = pmin(X,t0)
-output = asp(t0,Time,Status,Z,TRT)
-output$SPD
-output$SED
+asp(t0,Time,Status,Z,TRT)
+
 }
 \references{
-Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression

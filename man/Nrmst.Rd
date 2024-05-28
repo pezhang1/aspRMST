@@ -2,62 +2,63 @@
 % Please edit documentation in R/rmstnormal.R
 \name{Nrmst}
 \alias{Nrmst}
-\title{Sample size calculation for a normal covariate}
+\title{Sample size calculation for testing restricted mean survival time difference adjusted for a normal covariate}
 \usage{
-Nrmst(
-  alpha0,
-  alpha1,
-  gamma0,
-  beta2,
-  crate,
-  t0,
-  maxE,
-  m,
-  effect,
-  NN,
-  alpha,
-  beta
-)
+Nrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN, alpha, pi)
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Coefficient of normal covariate}
+\item{beta}{Coefficient of normal covariate}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{m}{- Sample size used to calculate the maximum information, Imax}
+\item{m}{Sample size used to calculate the maximum information, Imax}
 
-\item{effect}{- Targeted effect size}
+\item{effect}{Targeted effect size}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 
-\item{alpha}{- Targeted type I error rate}
+\item{alpha}{Targeted type I error rate
 
-\item{beta}{- Targeted type II error rate}
+ @inherit Imaxrmst references}
+
+\item{pi}{Targeted power}
 }
 \value{
 Power for a trial with the given parameters.
 }
 \description{
-Sample size calculation for a normal covariate
+Sample size calculation for testing restricted mean survival time difference adjusted for a normal covariate
 }
 \details{
-See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+Calculates the sample size for testing survival probability difference given power and effect size via Monte Carlo simulation.
+ See Details section in \code{\link{Imaxasp}} on how trial data are simulated.
+ By using MC replicate datasets with an initial sample size M, we can calculate
+ \eqn{V_{0}^M=1/I_{0}^M} and \eqn{V_{effect}^M=1/I_{effect}^M}, which represent the variances
+ of the estimated differences in M patient trials.
+ Under the large sample normal distribution for the effect size estimator,
+  the required sample size depends on the unit variance,
+  which is the reciprocal of the amount of information contributed by a single patient.
+  To obtain the unit variances under the null and targeted alternative hypotheses,
+   \eqn{V_{0}^1} and \eqn{V_{effect}^1}, we rescale \eqn{V_{0}^M} and \eqn{V_{effect}^M} by calculating
+\eqn{V_{0}^1 = V_{0}^M \cdot M } and \eqn{V_{effect}^1 = V_{effect}^M \cdot M }.
+With the individual variances per patient, we can calculate the actual required total sample size N for the trial using the equation
+\deqn{N = \frac{\left(z_{1-\alpha/2}\sqrt{V_0^1} + z_{\pi} \sqrt{V_{effect}^1}\right)^2}{effect^2},}
 }
 \examples{
 \dontrun{
-set.seed(1234)
-Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = 0, t0=1,
-maxE=2, m = 400, beta2=0, effect = 0.088, NN = 100, alpha = 0.05, beta=0.2)
+set.seed(40)
+Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = -log(0.95), tau=1,
+maxE=2, m = 500, beta=log(1.5), effect = 0.0863, NN = 100, alpha = 0.05, pi=0.8)
 }
 }
 \references{

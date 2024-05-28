@@ -23,7 +23,10 @@
 #'
 #' @returns
 #'  \itemize{
-#'   \item Z Vector of test statistics
+#'   \item SPD - Vector of estimated survival probability differences
+#'   \item SED - Vector of estimated standard errors of estimated survival probability differences
+#'   \item IF - Vector of information fractions
+#'   \item TStat Vector of test statistics
 #'   \item Crit Vector of critical values
 #' }
 #' @export
@@ -84,5 +87,5 @@ gsASP = function(t0,Time,Status,Z,TRT, E, Imax, alpha = 0.05, u) {
   IF[length(IF)] = 1
   Z = spd/spdse
   Crit =gsDesign(k = length(u), test.type=2, timing = IF, sfu = sfPower, sfupar = 3)$upper$bound
-  return(list(Z = Z, Crit = Crit))
+  return(list(SPD = spd, SED= spedse, IF = IF, TStat = Z, Crit = Crit))
 }

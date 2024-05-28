@@ -7,25 +7,23 @@
 aspinternal(t0, Time, Status, Z, TRT)
 }
 \arguments{
-\item{t0}{- Pre-specified time point of analysis}
+\item{t0}{Pre-specified time point of analysis}
 
-\item{Time}{- Observed times}
+\item{Time}{Observed times}
 
-\item{Status}{- Event indicator (0 = censored, 1 = observed)}
+\item{Status}{Event indicator (0 = censored, 1 = observed)}
 
-\item{Z}{- Non-treatment group covariates}
+\item{Z}{Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = control, 1 = treatment)}
+\item{TRT}{Treatment group indicator (0 = control, 1 = treatment)}
 }
 \value{
-\itemize{
-  \item SPD - Adjusted SP difference estimate
-  \item SED - Standard error estimate of adjusted SP difference estimate
-  \item S0 - Adjusted SP of treatment group 0
-  \item S1 - Adjusted SP of treatment group 1
-  \item se10 - Standard error of adjusted SP of treatment group 0
-  \item se11 - Standard error of adjusted SP of treatment group 1
-}
+SPD Adjusted SP difference estimate
+  SED Standard error estimate of adjusted SP difference estimate
+  S0 Adjusted SP of treatment group 0
+   S1 Adjusted SP of treatment group 1
+  se10 Standard error of adjusted SP of treatment group 0
+  se11 Standard error of adjusted SP of treatment group 1
 }
 \description{
 Title

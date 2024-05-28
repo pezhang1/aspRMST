@@ -2,32 +2,32 @@
 % Please edit documentation in R/aspbinary.R
 \name{Imaxaspbinary}
 \alias{Imaxaspbinary}
-\title{Calculates \eqn{I_{max}} for adjusted SPs for binary covariates}
+\title{Calculates \eqn{I_{max}} for adjusted survival probability difference for binary covariates}
 \usage{
-Imaxaspbinary(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN, p)
+Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, p)
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Vector of coefficients for binary covariates}
+\item{beta}{Vector of coefficients for binary covariates}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted SPs for each group are calculated}
+\item{t0}{Pre-specified time at which adjusted SPs for each group are calculated}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{- Sample size per group}
+\item{n}{Sample size per group}
 
-\item{effect}{- Targeted effect size}
+\item{effect}{Targeted effect size}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 
-\item{p}{- Vector of probabilities for binary covariates}
+\item{p}{Vector of probabilities for binary covariates}
 }
 \value{
 Maximum information for a trial with the given parameters.
@@ -35,7 +35,7 @@ Maximum information for a trial with the given parameters.
 \description{
 Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
 This function simulates NN number of trials, calculates the
-adjusted SP difference between the treatment and control group for each of the NN trials,
+adjusted survival probability (SP) difference between the treatment and control group for each of the NN trials,
  and then takes the inverse of the variance of these differences to obtain \eqn{I_{max}}.
 }
 \details{
@@ -46,18 +46,19 @@ where the shape and rate parameters
 \eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
 and \eqn{\mathbf{Z}} (vector of baseline covariates):
  \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
-\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
+\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \boldsymbol{\beta}^T \mathbf{Z}).}
 \eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
 simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
 }
 \examples{
 \dontrun{
-Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
-maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3))
+set.seed(888)
+Imaxaspbinary(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+maxE=2, n=200, effect= 0, NN = 10000,p=c(0.5, 0.3)) #572.23
 }
 }
 \references{
-Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression

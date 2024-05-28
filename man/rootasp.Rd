@@ -2,39 +2,30 @@
 % Please edit documentation in R/normal.R
 \name{rootasp}
 \alias{rootasp}
-\title{Calculates \eqn{\beta_W} given a SP effect size}
+\title{Calculates \eqn{\beta_W} given a survival probability effect size}
 \usage{
-rootasp(alpha0, alpha1, gamma0, beta2, t0, effect)
+rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
 }
 \arguments{
-\item{alpha0}{- parameter to specify in Weibull model See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model See Details for more information.}
 
-\item{alpha1}{- parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. alpha1 = 0 means there are proportional hazards; alpha1 != 0 means the proportional hazards assumption is violated}
 
-\item{gamma0}{- parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- vector of coefficients for non-treatment group binary variables}
+\item{beta}{Vector of coefficients for non-treatment group binary variables}
 
-\item{t0}{- pre-specified time at which adjusted SPs for each group are calculated}
+\item{t0}{Pre-specified time at which adjusted SPs for each group are calculated}
 
-\item{effect}{- targeted effect size}
+\item{effect}{Targeted effect size}
+}
+\value{
+\eqn{\beta_W}, the coefficient for the treatment group variable
 }
 \description{
-Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given SP effect size
-}
-\details{
-Trial data are simulated using the following assumptions.
-Assume the event time for a subject follows a Weibull distribution with survival function
-\deqn{S(t|Z_W, \mathbf{Z}) = \exp(-\gamma t^{\alpha}),}
-where the shape and rate parameters
-\eqn{\gamma} and \eqn{\alpha}  depend on \eqn{Z_W} (treatment group indicator)
-and \eqn{\mathbf{Z}} (vector of baseline covariates):
- \deqn{\alpha = \alpha_0 + \alpha_1Z_W,}
-\deqn{\gamma = \gamma_0 \exp(\beta_WZ_W + \mathbf{\beta}^T \mathbf{Z}).}
-\eqn{\alpha_0},  \eqn{\alpha_1}, and \eqn{\gamma_0} are parameters that are chosen to
-simulate trial data under a proportional hazards model, delayed effect setting, or crossing curves setting.
+Calculates \eqn{\beta_W}, the coefficient for the treatment group variable, that corresponds to a given survival probability effect size
 }
 \examples{
-rootasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta2 =0, t0=1,
-effect=0.140996938)
+rootasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta =0, t0=1,
+effect=0.14)
 }

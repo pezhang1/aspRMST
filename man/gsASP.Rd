@@ -2,52 +2,53 @@
 % Please edit documentation in R/gsASP.R
 \name{gsASP}
 \alias{gsASP}
-\title{Group sequential test of adjusted SPs}
+\title{Group sequential test of adjusted survival probabilities}
 \usage{
-gsASP(t0, Time, Status, Z, TRT, E, alpha = 0.05, u)
+gsASP(t0, Time, Status, Z, TRT, E, Imax, alpha = 0.05, u)
 }
 \arguments{
-\item{t0}{-  Pre-specified time point of analysis}
+\item{t0}{Pre-specified time point of analysis}
 
-\item{Time}{- Observed times}
+\item{Time}{Observed times}
 
-\item{Status}{- Event indicator (0 = censored, 1 = observed)}
+\item{Status}{Event indicator (0 = censored, 1 = observed)}
 
-\item{Z}{- Non-treatment group covariates}
+\item{Z}{Non-treatment group covariates}
 
-\item{TRT}{- Treatment group indicator (0 = Control, 1 = Treatment)}
+\item{TRT}{Treatment group indicator (0 = Control, 1 = Treatment)}
 
-\item{E}{- Enrollment times}
+\item{E}{Enrollment times}
 
-\item{alpha}{- Targeted type I error rate}
+\item{Imax}{Maximum information}
 
-\item{u}{- Calendar times of analysis
+\item{alpha}{Targeted type I error rate}
 
-
-
-
-
- @return
- \itemize{
-  \item Z - Vector of test statistics
-  \item Crit - Vector of tritical values
-   }}
+\item{u}{Calendar times of analysis}
+}
+\value{
+\itemize{
+  \item SPD - Vector of estimated survival probability differences
+  \item SED - Vector of estimated standard errors of estimated survival probability differences
+  \item IF - Vector of information fractions
+  \item TStat Vector of test statistics
+  \item Crit Vector of critical values
+}
 }
 \description{
-Performs a group sequential test of adjusted SPs between two treatment groups
+Performs a group sequential test of adjusted survival probabilities (SPs) between two treatment groups
 when provided the time point of analysis, the observed times, event indicator,
 covariates, treatment group indicator, enrollment times, and calendar times of analysis.
 }
 \examples{
 \dontrun{
 library(survival)
-
+set.seed(2024)
 alpha0 = 1.5
 alpha1 = -1
 beta1 = -0.399782432
 n=200
-crate =0
-beta2=0
+crate =-log(0.95)
+beta2=log(1.5)
 t0=1
 gamma0 = -log(0.4)
 maxE = 2
@@ -64,14 +65,15 @@ if (crate == 0)
 {CT = rexp(2*n, rate=crate)}
 Data = cbind(E,FT,CT,Z1,Z2)
 delta = as.numeric(FT < CT)
-test <- gsASP(t0 = t0,Time = FT,Status = delta,Z = Z2,TRT = Z1, E = E, alpha = 0.05, u =u)
-test$Crit
-test$Z
+X = pmin(FT,CT)
+test <- gsASP(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, Imax =450,  E = E, alpha = 0.05, u =u)
+test$Crit #2.790759 2.475604 2.012867
+test$Z # 2.227619 2.165275 2.607175
 }
 
 }
 \references{
-Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
+Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
 
 Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
 Estimation of Direct Adjusted Survival Curves Based on a Stratified Cox Regression

@@ -2,15 +2,15 @@
 % Please edit documentation in R/rmstbinary.R
 \name{Imaxrmstbinary}
 \alias{Imaxrmstbinary}
-\title{Calculates \eqn{I_{max}} for adjusted SPs for binary covariates}
+\title{Calculates \eqn{I_{max}} for adjusted restricted mean survival time difference for binary covariates}
 \usage{
 Imaxrmstbinary(
   alpha0,
   alpha1,
   gamma0,
-  beta2,
+  beta,
   crate,
-  t0,
+  tau,
   maxE,
   n,
   effect,
@@ -19,37 +19,38 @@ Imaxrmstbinary(
 )
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Vector of coefficients for binary covariates}
+\item{beta}{Vector of coefficients for binary covariates}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{- Sample size per group}
+\item{n}{Sample size per group}
 
-\item{effect}{- Targeted effect size}
+\item{effect}{Targeted effect size}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 
-\item{p}{- Vector of probabilities for binary covariates}
+\item{p}{Vector of probabilities for binary covariates}
 }
 \value{
 Maximum information for a trial with the given parameters.
 }
 \description{
-Calculates \eqn{I_{max}} for adjusted SPs for binary covariates
+Calculates \eqn{I_{max}} for adjusted restricted mean survival time difference for binary covariates
 }
 \examples{
 \dontrun{
- Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+set.seed(90)
+ Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
  maxE=200, n=200, effect=0.088, NN=100,p=c(0.5,0.3) )
 }
 }

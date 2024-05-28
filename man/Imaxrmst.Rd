@@ -2,41 +2,41 @@
 % Please edit documentation in R/rmstnormal.R
 \name{Imaxrmst}
 \alias{Imaxrmst}
-\title{Calculates \eqn{I_{max}} for adjusted RMSTs for a normal covariate}
+\title{Calculates \eqn{I_{max}} for adjusted restricted mean survival time difference for a normal covariate}
 \usage{
-Imaxrmst(alpha0, alpha1, gamma0, beta2, crate, t0, maxE, n, effect, NN)
+Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN)
 }
 \arguments{
-\item{alpha0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{alpha0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{alpha1}{- Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
+\item{alpha1}{Parameter to specify in Weibull model. See Details for more information. \eqn{\alpha_1  = 0 } means there are proportional hazards; \eqn{\alpha_1 \neq 0 }  means the proportional hazards assumption is violated}
 
-\item{gamma0}{- Parameter to specify in Weibull model. See Details for more information.}
+\item{gamma0}{Parameter to specify in Weibull model. See Details for more information.}
 
-\item{beta2}{- Coefficient of normal covariate}
+\item{beta}{Coefficient of normal covariate}
 
-\item{crate}{- Censoring rate, assumes an exponential distribution}
+\item{crate}{Censoring rate, assumes an exponential distribution}
 
-\item{t0}{- Pre-specified time at which adjusted RMSTs for each group are calculated}
+\item{tau}{Pre-specified survival horizon time for adjusted restricted mean survival times}
 
-\item{maxE}{- Maximum enrollment time. Assumes uniform enrollment between [0, E]}
+\item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{- Sample size per group}
+\item{n}{Sample size per group}
 
-\item{effect}{- Targeted effect size}
+\item{effect}{Targeted effect size}
 
-\item{NN}{- Number of iterations used to calculate the maximum information}
+\item{NN}{Number of iterations used to calculate the maximum information}
 }
 \value{
 Maximum information for a trial with the given parameters.
 }
 \description{
-Calculates \eqn{I_{max}} for adjusted RMSTs for a normal covariate
+Calculates \eqn{I_{max}} for adjusted restricted mean survival time difference for a normal covariate
 }
 \examples{
 \dontrun{
-set.seed(1234)
-Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta2=0, crate=0, t0=1,
+set.seed(50)
+Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
 maxE=2, n=200, effect=0.088, NN = 100)
 }
 
