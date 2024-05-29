@@ -8,22 +8,23 @@
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Information for a trial with the input parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(90)
 #'  Imaxrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#'  maxE=200, n=200, effect=0.088, NN=100,p=c(0.5,0.3) )
+#'  maxE=200, N=400, effect=0.088, MC=100,p=c(0.5,0.3) )
 #' }
-Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p ) {
+Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC,p ) {
+  n=ceiling(N/2)
   minE = 0
   beta1 = rootrmstbinary(alpha0, alpha1, gamma0, beta, tau, effect,p)
   umax = tau + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
-  for (i in 1:NN)
+  for (i in 1:MC)
   {
     E = runif(2*n, min=minE, max=maxE)          # enrollment times
     Z1 = c(rep(0,n),rep(1,n))                   # treatment indicator
@@ -77,19 +78,19 @@ Imaxrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, ef
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Power given sample size, effect size, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(70)
 #' powerrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#' maxE=2, n=196, effect = 0.088, NN=100, alpha=0.05, p=c(0.5, 0.3))
+#' maxE=2, N=392, effect = 0.088, MC=100, alpha=0.05, p=c(0.5, 0.3))
 #' }
-powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN, alpha,p) {
-  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p)
-  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN,p)
-
+powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC, alpha,p) {
+  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC,p)
+  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect = 0, MC,p)
+  n = ceiling(N/2)
   zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
@@ -109,20 +110,20 @@ powerrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, e
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Sample size given power, effect size, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(60)
 #' Nrmstbinary(alpha0 = 1.5, alpha1=-0.3, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, tau=1,
-#' maxE=2, m=400, effect=0.08945, NN=100, alpha=0.05, pi=0.8, p=c(0.5,0.3))
+#' maxE=2, M=1000, effect=0.08945, MC=100, alpha=0.05, pi=0.8, p=c(0.5,0.3))
 #' }
-Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN, alpha,pi = 0.8,p) {
-  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect, NN,p)
-  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect = 0, NN,p)
-  M = m
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
+Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, M, effect, MC, alpha,pi = 0.8,p) {
+  Veffect = 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N=M, effect, MC,p)
+  V0= 1/Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N=M, effect = 0, MC,p)
+  m = ceiling(M/2)
+  N = (qnorm(1-alpha/2)*sqrt(V0*m) + qnorm(pi)*sqrt(Veffect*m))^2/effect^2
 
   return(N)
 }
@@ -139,22 +140,23 @@ Nrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effec
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Effect size given sample size, power, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(80)
 #' ESrmstbinary(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#' maxE=2, n=196, NN=100, alpha=0.05, pi = 0.8, max.iter=10, p=c(0.5, 0.3))
+#' maxE=2, N=196, MC=100, alpha=0.05, pi = 0.8, max.iter=10, p=c(0.5, 0.3))
 #' }
-ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter=10,p){
+ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, MC, alpha=0.05, pi = 0.8, max.iter=10,p){
+  n=ceiling(N/2)
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
  # N = n
-  Imax = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN,p)
+  Imax = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, MC,p)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
@@ -163,7 +165,7 @@ ESrmstbinary <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, 
   {
     effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN,p)
+    Imax1 = Imaxrmstbinary(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, MC,p)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff

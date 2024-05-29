@@ -21,7 +21,10 @@
 #'
 #' @returns
 #'  \itemize{
-#'   \item Z Vector of test statistics
+#'  \item  muD - Vector of estimated restricted mean survival time differences
+#'   \item SED - Vector of estimated standard errors of estimated restricted mean survival time differences
+#'   \item IF - Vector of information fractions
+#'   \item TStat Vector of test statistics
 #'   \item Crit Vector of critical values
 #' }
 #' @export
@@ -81,12 +84,12 @@ gsRMST = function(tau,Time,Status,Z,TRT, E, Imax, alpha = 0.05, u) {
     rmstdiffse[i] = output$SED
   }
  Imax = 1/rmstdiffse[length(u)]^2
- print("Imax: ", Imax)
+ #print("Imax: ", Imax)
   IF = (1/rmstdiffse^2)/Imax
 
   Z = rmstdiff/rmstdiffse
   Crit =gsDesign(k = length(u), test.type=2, timing = IF, sfu = sfPower, sfupar = 3)$upper$bound
-  return(list(Z = Z, Crit = Crit))
+  return(list(muD = rmstdiff, SED = rmstdiffse, IF=IF, TStat = Z, Crit = Crit))
 
 }
 

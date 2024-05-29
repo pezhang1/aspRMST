@@ -12,8 +12,8 @@ ESasp(
   crate,
   t0,
   maxE,
-  n,
-  NN,
+  N,
+  MC,
   alpha = 0.05,
   pi = 0.8,
   max.iter
@@ -34,9 +34,9 @@ ESasp(
 
 \item{maxE}{Maximum enrollment time. Assumes uniform enrollment between [0, maxE]}
 
-\item{n}{Sample size per group}
+\item{N}{Total sample size}
 
-\item{NN}{Number of iterations used to calculate the maximum information}
+\item{MC}{Number of Monte Carlo iterations used to calculate the information}
 
 \item{alpha}{Targeted type I error rate}
 
@@ -46,6 +46,8 @@ ESasp(
 }
 \value{
 Effect size for a trial given the parameters
+
+Effect size given sample size, power, and other parameters
 }
 \description{
 Effect size calculation for testing survival probability difference adjusted for a normal covariate
@@ -69,7 +71,7 @@ Using this effect size, \eqn{V_{effect_0}^N} is calculated by taking the recipro
 \dontrun{
 set.seed(1234)
 ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
-maxE=2, n=190, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
+maxE=2, N=380, MC = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
 }
 }
 \references{

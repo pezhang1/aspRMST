@@ -10,14 +10,14 @@
 #' @param crate Censoring rate, assumes an exponential distribution
 #' @param tau Pre-specified survival horizon time for adjusted restricted mean survival times
 #' @param maxE Maximum enrollment time. Assumes uniform enrollment between [0, maxE]
-#' @param n Sample size per group
+#' @param N Total sample size
 #' @param effect Targeted effect size
-#' @param NN Number of iterations used to calculate the maximum information
+#' @param MC Number of Monte Carlo iterations used to calculate the information
 #'
 #'
 #' @export
 #'
-#' @return
+#' @return Information for a trial with the input parameters
 #'
 #' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}
 #' @references Zhang, X., Loberiza, F. R., Klein, J. P., and Zhang, M.-J. (2007). A SAS Macro for
@@ -34,16 +34,17 @@
 #' \dontrun{
 #' set.seed(50)
 #' Imaxrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#' maxE=2, n=200, effect=0.088, NN = 100)
+#' maxE=2, N=400, effect=0.088, MC = 100)
 #' }
 #'
-Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN) {
+Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC) {
+  n=ceiling(N)/2
   minE = 0
   beta1 = rootrmst(alpha0, alpha1, gamma0, beta, tau, effect)
   umax = tau + maxE
   rmst.diff.est = NULL
   rmst.diff.se = NULL
-  for (i in 1:NN)
+  for (i in 1:MC)
   {
     E = runif(2*n, min=minE, max=maxE)          # enrollment times
     Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
@@ -116,7 +117,7 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, 
 #' @param alpha Targeted type I error rate
 #'
 #'  @inherit Imaxrmst references
-#' @return
+#' @return Power given sample size, effect size, and other parameters
 #' @export
 #'
 #' @examples
@@ -124,14 +125,14 @@ Imaxrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, 
 #' set.seed(30)
 #' #1397.7830
 #' powerrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#' maxE=2, n=199, effect=0.088, NN=200, alpha=0.05)
+#' maxE=2, N=398, effect=0.088, MC=200, alpha=0.05)
 #' }
 #'
 #'
-powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN, alpha) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN)
-
+powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC, alpha) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect, MC)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, effect = 0, MC)
+  n = ceiling(N/2)
   zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
@@ -165,25 +166,25 @@ powerrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect,
 #'
 #' @inherit powerasp return
 #' @inheritParams powerrmst
-#' @param m Sample size used to calculate the maximum information, Imax
+#' @param M Sample size used to calculate the information, Imax
 #' @param pi Targeted power
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Sample size given power, effect size, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(40)
 #' Nrmst(alpha0 = 1.5, alpha1 = -0.3, gamma0 = -log(0.4), crate = -log(0.95), tau=1,
-#' maxE=2, m = 500, beta=log(1.5), effect = 0.0863, NN = 100, alpha = 0.05, pi=0.8)
+#' maxE=2, M = 1000, beta=log(1.5), effect = 0.0863, MC = 100, alpha = 0.05, pi=0.8)
 #' }
-Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN, alpha,pi) {
-  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect, NN)
-  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n=m, effect = 0, NN)
-  M = m
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
+Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, M, effect, MC, alpha,pi) {
+  Veffect = 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N=M, effect, MC)
+  V0= 1/Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N=M, effect = 0, MC)
+  m = ceiling(M/2)
+  N = (qnorm(1-alpha/2)*sqrt(V0*m) + qnorm(pi)*sqrt(Veffect*m))^2/effect^2
 
   return(N)
 }
@@ -223,22 +224,23 @@ Nrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, m, effect, NN,
 #'
 #' @inherit Imaxrmst references
 #'
-#' @return
+#' @return Effect size given sample size, power, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed()
 #' ESrmst(alpha0=1.5, alpha1=-0.3, gamma0=-log(0.4), beta=0, crate=0, tau=1,
-#' maxE=2, n=199, NN=100, alpha=0.05, pi = 0.8, max.iter=10)
+#' maxE=2, N=398, MC=100, alpha=0.05, pi = 0.8, max.iter=10)
 #' }
-ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
+ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, N, MC, alpha=0.05, pi = 0.8, max.iter){
+  n = ceiling(N/2)
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
   #N = n
-  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, NN)
+  Imax = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect = 0, MC)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
@@ -247,7 +249,7 @@ ESrmst <- function(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, NN, alpha=
   {
     effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, NN)
+    Imax1 = Imaxrmst(alpha0, alpha1, gamma0, beta, crate, tau, maxE, n, effect, MC)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff

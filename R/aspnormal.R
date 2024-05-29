@@ -1,9 +1,9 @@
 #' @title Calculates \eqn{I_{max}} for adjusted survival probability difference for a normal covariate
 #'
 #'
-#' @description Calculates \eqn{I_{max}}, the maximum information for the trial, via Monte Carlo simulation.
-#' This function simulates NN number of trials, calculates the
-#' adjusted survival probability (SP) difference between the treatment and control group for each of the NN trials,
+#' @description Calculates \eqn{I_{max}}, the information for the trial, via Monte Carlo simulation.
+#' This function simulates MC number of trials, calculates the
+#' adjusted survival probability (SP) difference between the treatment and control group for each of the MC trials,
 #'  and then takes the inverse of the variance of these differences to obtain \eqn{I_{max}}.
 #'
 #' @return Maximum information for a trial with the given parameters.
@@ -26,9 +26,9 @@
 #' @param crate Censoring rate, assumes an exponential distribution
 #' @param t0 Pre-specified time at which adjusted SPs for each group are calculated
 #' @param maxE Maximum enrollment time. Assumes uniform enrollment between [0, maxE]
-#' @param n Sample size per group
+#' @param N Total sample size
 #' @param effect Targeted effect size
-#' @param NN Number of iterations used to calculate the maximum information
+#' @param MC Number of Monte Carlo iterations used to calculate the information
 #'
 #'
 #' @references Zhang, P.K., Logan, B.L., and Martens, M.J. (2024). Covariate-adjusted Group Sequential Comparisons of Survival Probabilities. \emph{arXiv}. https://arxiv.org/abs/2403.17117.
@@ -38,6 +38,7 @@
 #' @references Zucker, D.M. (1998) Restricted Mean Life with Covariates: Modification and Extension
 #' of a Useful Survival Analysis Method. \emph{J Am Stat Assoc} \strong{93(442)}, 702-709
 #'
+#' @return Information for a trial with the input parameters
 #'
 #' @export
 #'
@@ -46,15 +47,16 @@
 #' set.seed(567)
 #' #467.13
 #' Imaxasp(alpha0=1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
-#' maxE=2, n=200, effect=0, NN=10000)
+#' maxE=2, N=400, effect=0, MC=10000)
 #' }
-Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN) {
+Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N, effect, MC) {
+  n = ceiling(N/2)
   asp.diff.est = NULL
   asp.diff.se = NULL
   minE = 0
   beta1 = rootasp(alpha0, alpha1, gamma0, beta, t0, effect)
   umax = t0 + maxE
-  for (i in 1:NN)
+  for (i in 1:MC)
   {
 
     E = runif(2*n, min=minE, max=maxE)          # enrollment times
@@ -129,7 +131,7 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN
 #' @inheritParams Imaxasp
 #' @param alpha Targeted type I error rate
 #'
-#'
+#' @return Power given sample size, effect size, and other parameters
 #' @export
 #'
 #' @examples
@@ -137,12 +139,12 @@ Imaxasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN
 #' set.seed(14)
 #'  #0.8012848
 #'  powerasp(alpha0 = 1.5, alpha1= -1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
-#'  maxE=2, n = 190, effect=0.135, NN=10000, alpha=0.05) #0.797
+#'  maxE=2, N = 380, effect=0.135, MC=10000, alpha=0.05) #0.797
 #' }
-powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN, alpha) {
-  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
-  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
-
+powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N, effect, MC, alpha) {
+  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N, effect, MC)
+  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N, effect = 0, MC)
+  n = ceiling(N/2)
   zbeta = (sqrt(n)*effect - qnorm(1-alpha/2)*sqrt(V0*n))/sqrt(Veffect*n)
   if (effect ==0)
     return(pnorm(zbeta)*2)
@@ -178,24 +180,24 @@ powerasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, N
 #' @inherit Imaxasp references
 #'
 #' @inheritParams powerasp
-#' @param m Sample size used to calculate the maximum information, Imax
+#' @param M Sample size used to calculate the information, Imax
 #' @param pi Targeted power
 #'
-#'
+#' @return Sample size given power, effect size, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #'  set.seed(10)
 #'  Nasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95),
-#'   t0=1, maxE=2, m=500,
-#'   effect=0.135, NN=10000, alpha=0.05, pi = 0.8) #189.78*2
+#'   t0=1, maxE=2, M=1000,
+#'   effect=0.135, MC=10000, alpha=0.05, pi = 0.8) #189.78*2
 #' }
-Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, alpha,pi=0.8) {
-  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect, NN)
-  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n=m, effect = 0, NN)
-  M = m
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2
+Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, M, effect, MC, alpha,pi=0.8) {
+  Veffect = 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N=M, effect, MC)
+  V0= 1/Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N=M, effect = 0, MC)
+  m = ceiling(M/2)
+  N = (qnorm(1-alpha/2)*sqrt(V0*m) + qnorm(pi)*sqrt(Veffect*m))^2/effect^2*2
 
   return(N)
 }
@@ -242,23 +244,24 @@ Nasp <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, m, effect, NN, a
 #' @param pi Targeted power
 #' @param max.iter Maximum number of iterations to calculate the effect size
 #'
-#'
+#' @return Effect size given sample size, power, and other parameters
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' set.seed(1234)
 #' ESasp(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(1.5), crate=-log(0.95), t0=1,
-#' maxE=2, n=190, NN = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
+#' maxE=2, N=380, MC = 10000, alpha=0.05, pi=0.8, max.iter=10) #0.1340863
 #' }
 ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
-                  maxE, n, NN, alpha=0.05, pi = 0.8, max.iter){
+                  maxE, N, MC, alpha=0.05, pi = 0.8, max.iter){
+  n = ceiling(N/2)
   zalpha = qnorm(1-alpha/2)
   zbeta = qnorm(pi)
   beta1 = NULL
   asp.diff.est = NULL
   #N = n
-  Imax = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, NN)
+  Imax = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect = 0, MC)
   Vnull = 1/Imax
   V10 = 1/Imax
   V11 = 1/Imax
@@ -267,7 +270,7 @@ ESasp <- function(alpha0, alpha1, gamma0, beta, crate, t0,
   {
     effect = (zalpha * sqrt(Vnull*n) + zbeta * sqrt(V10*n)) / sqrt(n)      # calculate delta
 
-    Imax1 = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, NN)
+    Imax1 = Imaxasp(alpha0, alpha1, gamma0, beta, crate, t0, maxE, n, effect, MC)
     V11 = 1 / Imax1
     diff = abs(V11-V10)
     #diff
