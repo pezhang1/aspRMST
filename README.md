@@ -139,12 +139,22 @@ $$N = \frac{\left(z_{1-\alpha/2}\sqrt{V_0^1} + z_{\pi} \sqrt{V_{effect}^1}\right
 ## Example1
 
 This is an example to obtain restricted mean survival time estimates for
-a single analysis using simulated data.
+a single analysis using simulated data. Data are simulated under a
+delayed effect setting with alpha0=1.5, alpha1=-0.3, and
+gamma0=-log(0.4). The coefficient for the treatment indicator variable
+is set to betaW=-0.5, and the coefficient for the covariate Z, which was
+simulated from a standard normal distribution, is set to beta=log(1.5).
+The censoring rate was set to exp(-log(0.95)) distribution to yield 5%
+censoring per year. The sample size was set to 400 per group, and the
+restriction window was set to \[0, 1\]. The estimated restricted mean
+survival time difference is 0.0743 and the estimated standard error of
+the estimated difference is 0.0217.
 
 ``` r
 library(aspRMST)
 #> Loading required package: survival
 #> Loading required package: gsDesign
+set.seed(1)
 tau = 1
 n0 = 400
 n1 = 400
@@ -152,38 +162,49 @@ n = n0 + n1
 alpha0 = 1.5
 alpha1 = -0.3
 gamma0 = -log(0.4)
-beta1 = -0.5
-beta2 = log(1.5)
+betaW = -0.5
+beta = log(1.5)
 crate = -log(0.95)
 TRT = c(rep(0,n0),rep(1,n1))                        # treatment indicator
 Z = cbind(rnorm(n))                               # covariates
 alpha = alpha0+alpha1*TRT
-gamma1 = gamma0*exp(beta1*TRT+beta2*Z)
+gamma1 = gamma0*exp(betaW*TRT+beta*Z)
 FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
 CT = rexp(n, rate=crate)
 X = pmin(FT,CT)
 Status = as.numeric(FT <= CT)     & (X <= tau)
 Time = pmin(X,tau)
 rmst(tau,Time,Status,Z,TRT)$muD 
-#> [1] 0.05212961
+#> [1] 0.07427065
 rmst(tau,Time,Status,Z,TRT)$SED 
-#> [1] 0.02106129
+#> [1] 0.02166575
 ```
 
 ## Example2
 
 This is an example that performs a group sequential test of the equality
-of RMSTs using simulated data.
+of RMSTs using simulated data. Data are simulated under a delayed effect
+setting with alpha0=1.5, alpha1=-0.3, and gamma0=-log(0.4). The
+coefficient for the treatment indicator variable is set to betaW=-0.613,
+and the coefficient for the covariate Z, which was simulated from a
+standard normal distribution, is set to beta=log(1.2). The censoring
+rate was set to 0, i.e, no censoring. The sample size was set to 200 per
+group, and the restriction window was set to \[0, 1\]. Enrollment was
+assumed to be uniform between \[0, maxE\] = \[0, 2\]. Interim analyses
+were performed at 1.3, 1.8, and 3 years. The maximum information was set
+to 1100. The test statistics were 0.80, 2.56, 2.76; and the critical
+values were 2.86, 2.43, and 2.02. A significant difference would be
+found at stage 2.
 
 ``` r
 library(aspRMST)
 set.seed(1000)
 alpha0 = 1.5
 alpha1 = -0.3
-beta1 = -0.61335306
+betaW = -0.613
 n=200
 crate =0
-beta2=0
+beta=log(1.2)
 tau=1
 gamma0 = -log(0.4)
 maxE = 2
@@ -192,7 +213,7 @@ E = runif(2*n, min=0, max=maxE)          # enrollment times
 Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
 Z2 = as.matrix(rnorm(2*n))                             # covariates
 alpha = alpha0+alpha1*Z1
-gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+gamma1 = gamma0*exp(betaW*Z1+beta*Z2)
 FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
 CT = NULL
 if (crate == 0)
@@ -202,32 +223,59 @@ Data = cbind(E,FT,CT,Z1,Z2)
 delta = as.numeric(FT < CT)
 X = pmin(FT,CT)
 test <- gsRMST(tau = tau, Time = X,Status = delta,Z = Z2,TRT = Z1, Imax=1100, E = E, alpha = 0.05, u =u)
-test$Z 
-#> NULL
+test$TStat 
+#> [1] 0.7030141 2.5626664 2.7628206
 test$Crit 
-#> [1] 2.844231 2.418429 2.018115
+#> [1] 2.856434 2.429439 2.016581
 ```
 
 ## Example3
 
 This is an example that performs a sample size calculation for testing
-equality of adjusted SPs given power and effect size.
+equality of adjusted SPs given power and effect size. Data are simulated
+under a crossing curves scenario using alpha0 = 1.5, alpha1=-1, and
+gamma0=-log(0.4). Two binary covariates are used and simulated under a
+Bern(0.5) and Bern(0.3) distributions. The coefficients for both
+covariates are set to log(2)/sqrt(2). The censoring rate is set to 0,
+i.e., no censoring. The pre-specified time point of analysis is 1 year.
+Enrollment was assumed to be uniform between \[0, maxE\] = \[0, 2\].
+Effect size was set to 0.121 difference in survival probabilities
+between the treatment and control groups. Targeted type I error rate is
+5% and targeted power is 80%. 10000 Monter Carlo iterations were used to
+calculate the information for the trial. M was set to 1000 to obtain the
+variances of the estimated differences in M patients. This variance was
+rescaled to the unit variance to calculate the required sample size. See
+the Methods section for more details on M. The calculated total sample
+size was 385.
 
 ``` r
 library(aspRMST)
 set.seed(8)
-#Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
-#maxE=2, M=1000, effect=0.121, MC=10000, alpha=0.05, pi = 0.8, p =c(0.5, 0.3)) 
+Naspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+maxE=2, M=1000, effect=0.121, MC=10000, alpha=0.05, pi = 0.8, p =c(0.5, 0.3)) 
+#> [1] 384.5381
 ```
 
 ## Example4
 
 This is an example that performs a power calculation for testing
-equality of adjusted SPs given sample size and effect size.
+equality of adjusted SPs given sample size and effect size. Data are
+simulated under a crossing curves scenario using alpha0 = 1.5,
+alpha1=-1, and gamma0=-log(0.4). Two binary covariates are used and
+simulated under a Bern(0.5) and Bern(0.3) distributions. The
+coefficients for both covariates are set to log(2)/sqrt(2). The
+censoring rate is set to 0, i.e., no censoring. The pre-specified time
+point of analysis is 1 year. Enrollment was assumed to be uniform
+between \[0, maxE\] = \[0, 2\]. Effect size was set to 0.121 difference
+in survival probabilities between the treatment and control groups.
+Targeted type I error rate is 5% and targeted power is 80%. 10000 Monter
+Carlo iterations were used to calculate the information for the trial.
+The total sample size N was set to 386. The calculated power was 0.796.
 
 ``` r
 library(aspRMST)
 set.seed(16)
-#poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
-#maxE=2, N=386, effect=0.121, MC=10000, alpha = 0.05, p =c(0.5, 0.3)) 
+poweraspbinary(alpha0 = 1.5, alpha1=-1, gamma0=-log(0.4), beta=log(2)/sqrt(2), crate=0, t0=1,
+maxE=2, N=386, effect=0.121, MC=10000, alpha = 0.05, p =c(0.5, 0.3)) 
+#> [1] 0.7960318
 ```
