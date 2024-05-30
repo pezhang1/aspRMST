@@ -132,7 +132,7 @@ Naspbinary <- function(alpha0, alpha1, gamma0, beta, crate, t0, maxE, M, effect,
   Veffect = 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N=M, effect, MC, p)
   V0= 1/Imaxaspbinary(alpha0, alpha1, gamma0, beta, crate, t0, maxE, N=M, effect = 0, MC, p)
   m = ceiling(M/2)
-  N = (qnorm(1-alpha/2)*sqrt(V0*M) + qnorm(pi)*sqrt(Veffect*M))^2/effect^2*2
+  N = (qnorm(1-alpha/2)*sqrt(V0*m) + qnorm(pi)*sqrt(Veffect*m))^2/effect^2*2
 
   return(N)
 }

@@ -37,10 +37,10 @@
 #' set.seed(2024)
 #' alpha0 = 1.5
 #' alpha1 = -1
-#' beta1 = -0.399782432
+#' betaW = -0.399782432
 #' n=200
 #' crate =-log(0.95)
-#' beta2=log(1.5)
+#' beta=log(1.5)
 #' t0=1
 #' gamma0 = -log(0.4)
 #' maxE = 2
@@ -49,7 +49,7 @@
 #' Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
 #' Z2 = as.matrix(rnorm(2*n))                             # covariates
 #' alpha = alpha0+alpha1*Z1
-#' gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+#' gamma1 = gamma0*exp(betaW*Z1+beta*Z2)
 #' FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
 #' CT = NULL
 #' if (crate == 0)
@@ -60,7 +60,7 @@
 #' X = pmin(FT,CT)
 #' test <- gsASP(t0 = t0,Time = X,Status = delta,Z = Z2,TRT = Z1, Imax =450,  E = E, alpha = 0.05, u =u)
 #' test$Crit #2.790759 2.475604 2.012867
-#' test$Z # 2.227619 2.165275 2.607175
+#' test$TStat # 2.227619 2.165275 2.607175
 #' }
 #'
 gsASP = function(t0,Time,Status,Z,TRT, E, Imax, alpha = 0.05, u) {

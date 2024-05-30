@@ -38,10 +38,10 @@
 #' set.seed(1000)
 #' alpha0 = 1.5
 #' alpha1 = -0.3
-#' beta1 = -0.61335306
+#' betaW = -0.61335306
 #' n=200
 #' crate =0
-#' beta2=0
+#' beta=0
 #' tau=1
 #' gamma0 = -log(0.4)
 #' maxE = 2
@@ -50,7 +50,7 @@
 #' Z1 = (c(rep(0,n),rep(1,n)))                   # treatment indicator
 #' Z2 = as.matrix(rnorm(2*n))                             # covariates
 #' alpha = alpha0+alpha1*Z1
-#' gamma1 = gamma0*exp(beta1*Z1+beta2*Z2)
+#' gamma1 = gamma0*exp(betaW*Z1+beta*Z2)
 #' FT = rweibull(2*n,shape=alpha,scale=gamma1**(-1/alpha))
 #' CT = NULL
 #' if (crate == 0)
@@ -60,7 +60,7 @@
 #' delta = as.numeric(FT < CT)
 #' X = pmin(FT,CT)
 #' test <- gsRMST(tau = tau,Time = X,Status = delta,Z = Z2,TRT = Z1, Imax=1100, E = E, alpha = 0.05, u =u)
-#' test$Z #1.051475 1.990320 2.232713
+#' test$TStat #1.051475 1.990320 2.232713
 #' test$Crit # 2.818662 2.383526 2.022924
 #' }
 #'

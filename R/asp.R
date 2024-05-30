@@ -47,13 +47,13 @@
 #' alpha0 = 1.5
 #' alpha1 = -1
 #' gamma0 = -log(0.4)
-#' beta1 = -0.5
-#' beta2 = log(1.5)
+#' betaW = -0.5
+#' beta = log(1.5)
 #' crate = -log(0.95)
 #' TRT = c(rep(0,n0),rep(1,n1))                        # treatment indicator
 #' Z = cbind(rnorm(n))                               # covariates
 #' alpha = alpha0+alpha1*TRT
-#' gamma1 = gamma0*exp(beta1*TRT+beta2*Z)
+#' gamma1 = gamma0*exp(betaW*TRT+beta*Z)
 #' FT = rweibull(n,shape=alpha,scale=gamma1**(-1/alpha))
 #' CT = rexp(n, rate=crate)
 #' X = pmin(FT,CT)
